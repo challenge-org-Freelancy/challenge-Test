@@ -13,7 +13,7 @@ export class BadgeComponent {
   getBadgeClasses(): string {
     if (this.variant === 'difficulty' && this.difficulty) {
       const difficultyClasses = {
-        'Beginner': 'px-3 py-1.5 rounded-lg text-sm font-medium bg-mint text-white shadow-md',
+        'Beginner': 'px-3 py-1.5 rounded-lg text-sm font-medium bg-beige text-charcoal shadow-md',
         'Intermediate': 'px-3 py-1.5 rounded-lg text-sm font-medium bg-sunny text-gray-900 shadow-md',
         'Advanced': 'px-3 py-1.5 rounded-lg text-sm font-medium bg-coral text-white shadow-md'
       };

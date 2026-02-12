@@ -6,29 +6,57 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Core Brand Blues
+        // Primary Brand Colors
         primary: {
-          DEFAULT: '#5B7CFF',
-          dark: '#3F5BDB',
-          light: '#7A94FF',
+          DEFAULT: '#b3d1f9',
+          dark: '#02066F',
+          light: '#C7D3E6',
         },
-        secondary: {
-          DEFAULT: '#8FD3FE',
-          light: '#B0E2FF',
+        royal: {
+          DEFAULT: '#02066F',
+          light: '#2F5DCC',
         },
-        // Joyful Accents
-        mint: {
-          DEFAULT: '#34D399',
-          dark: '#10B981',
-          light: '#6EE7B7',
+        // Supporting Blues
+        softBlue: {
+          DEFAULT: '#C7D3E6',
+          light: '#E8EEF7',
         },
-        sunny: {
-          DEFAULT: '#FBBF24',
-          light: '#FEF3C7',
+        lightBlue: {
+          DEFAULT: '#E8EEF7',
         },
-        coral: {
-          DEFAULT: '#FF6B6B',
-          light: '#FFE4E6',
+        // Secondary Neutral Colors
+        beige: {
+          DEFAULT: '#f5f5dc',
+          light: '#F5F1ED',
+        },
+        maroon: {
+          DEFAULT: '#800020',
+          dark: '#5C0017',
+          light: '#A64D4D',
+        },
+        gray: {
+          DEFAULT: '#D8D8D8',
+          dark: '#2B2F36',
+          600: '#6B7280',
+          300: '#D8D8D8',
+          100: '#F9FAFB',
+          50: '#E8EEF7',
+        },
+        charcoal: {
+          DEFAULT: '#2B2F36',
+        },
+        // Accent Colors (Use Sparingly)
+        success: {
+          DEFAULT: '#3FA66B',
+          light: '#E8F5ED',
+        },
+        warning: {
+          DEFAULT: '#E5A100',
+          light: '#FFF8E5',
+        },
+        error: {
+          DEFAULT: '#D64545',
+          light: '#FEE8E8',
         },
         // Professional Neutrals
         gray: {
@@ -39,12 +67,12 @@ module.exports = {
           50: '#F5F7FF',
         },
         // Background
-        background: '#F5F7FF',
+        background: '#E8EEF7',
         surface: '#FFFFFF',
       },
       boxShadow: {
-        'custom': '0 10px 15px -3px rgba(91, 124, 255, 0.1), 0 4px 6px -2px rgba(91, 124, 255, 0.05)',
-        'custom-lg': '0 20px 25px -5px rgba(91, 124, 255, 0.15), 0 10px 10px -5px rgba(91, 124, 255, 0.1)',
+        'custom': '0 4px 12px rgba(179, 209, 249, 0.12), 0 2px 4px rgba(179, 209, 249, 0.08)',
+        'custom-lg': '0 8px 24px rgba(179, 209, 249, 0.15), 0 4px 8px rgba(179, 209, 249, 0.1)',
       },
     },
   },

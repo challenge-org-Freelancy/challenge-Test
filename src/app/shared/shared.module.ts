@@ -9,13 +9,15 @@ import { FooterComponent } from './components/footer/footer.component';
 import { ButtonComponent } from './components/button/button.component';
 import { BadgeComponent } from './components/badge/badge.component';
 import { ChallengeCardComponent } from './components/challenge-card/challenge-card.component';
+import { HeaderComponent } from './components/header/header.component';
 
 const components = [
   NavigationComponent,
   FooterComponent,
   ButtonComponent,
   BadgeComponent,
-  ChallengeCardComponent
+  ChallengeCardComponent,
+  HeaderComponent
 ];
 
 @NgModule({

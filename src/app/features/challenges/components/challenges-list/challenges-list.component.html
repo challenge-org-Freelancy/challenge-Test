@@ -1,53 +1,42 @@
-<div class="min-h-screen bg-gradient-to-br from-gray-50 via-background to-white">
+<div class="challenges-page">
+  <app-header></app-header>
   
-  <!-- Header Section -->
-  <section class="bg-gradient-to-r from-primary to-primary-dark text-white py-16 relative overflow-hidden">
-    <!-- Decorative Elements -->
-    <div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-    <div class="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
-    
-    <div class="max-w-7xl mx-auto px-6 relative z-10">
-      <div class="text-center max-w-3xl mx-auto">
-        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white text-sm font-medium mb-6">
-          🚀 {{ filteredChallenges.length }} Challenges Available
+  <!-- Page Header Section -->
+  <section class="page-header-section">
+    <div class="header-container">
+      <div class="header-title-section">
+        <h1 class="page-title">Explore Challenges</h1>
+        <p class="page-subtitle">Discover curated challenges to enhance your skills and build your portfolio</p>
+      </div>
+      
+      <!-- Search Bar -->
+      <div class="search-section">
+        <div class="search-wrapper">
+          <app-challenge-search (searchChanged)="onSearchChanged($event)"></app-challenge-search>
         </div>
-        <h1 class="text-5xl md:text-6xl font-bold mb-6">
-          Explore Challenges
-        </h1>
-        <p class="text-xl text-white/90 mb-8">
-          Find the perfect challenge to level up your skills and grow your portfolio
-        </p>
       </div>
     </div>
   </section>
 
   <!-- Main Content -->
-  <div class="max-w-7xl mx-auto px-6 py-12">
+  <div class="main-content">
     
-    <!-- Search Bar -->
-    <div class="mb-8">
-      <app-challenge-search (searchChanged)="onSearchChanged($event)"></app-challenge-search>
-    </div>
-
-    <!-- Filters and View Toggle -->
-    <div class="mb-8">
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6">
-        <div class="flex-1">
+    <!-- Filters Section -->
+    <div class="search-filter-section">
+      <div class="controls-bar">
+        <div class="filters-wrapper">
           <app-challenge-filters (filtersChanged)="onFiltersChanged($event)"></app-challenge-filters>
         </div>
         
-        <!-- View Mode Toggle -->
-        <div class="flex items-center gap-3">
-          <span class="text-sm font-medium text-gray-600">View:</span>
-          <div class="inline-flex rounded-xl border-2 border-gray-300 bg-white p-1">
+        <div class="view-controls">
+          <div class="view-toggle">
             <button
               type="button"
               (click)="viewMode = 'grid'"
-              [class.bg-primary]="viewMode === 'grid'"
-              [class.text-white]="viewMode === 'grid'"
-              [class.text-gray-600]="viewMode !== 'grid'"
-              class="px-4 py-2 rounded-lg transition-all">
-              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              [class.active]="viewMode === 'grid'"
+              class="view-btn"
+              aria-label="Grid view">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <rect x="3" y="3" width="7" height="7"></rect>
                 <rect x="14" y="3" width="7" height="7"></rect>
                 <rect x="14" y="14" width="7" height="7"></rect>
@@ -57,11 +46,10 @@
             <button
               type="button"
               (click)="viewMode = 'list'"
-              [class.bg-primary]="viewMode === 'list'"
-              [class.text-white]="viewMode === 'list'"
-              [class.text-gray-600]="viewMode !== 'list'"
-              class="px-4 py-2 rounded-lg transition-all">
-              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              [class.active]="viewMode === 'list'"
+              class="view-btn"
+              aria-label="List view">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="8" y1="6" x2="21" y2="6"></line>
                 <line x1="8" y1="12" x2="21" y2="12"></line>
                 <line x1="8" y1="18" x2="21" y2="18"></line>
@@ -75,52 +63,49 @@
       </div>
 
       <!-- Results Summary -->
-      <div class="flex items-center justify-between mb-6">
-        <div class="text-gray-600">
-          Showing <span class="font-semibold text-gray-900">{{ (currentPage - 1) * itemsPerPage + 1 }}</span>
-          - 
-          <span class="font-semibold text-gray-900">{{ Math.min(currentPage * itemsPerPage, filteredChallenges.length) }}</span>
-          of 
-          <span class="font-semibold text-gray-900">{{ filteredChallenges.length }}</span>
-          challenges
+      <div class="results-summary">
+        <div class="results-text">
+          <span class="results-count">Showing <strong>{{ (currentPage - 1) * itemsPerPage + 1 }}</strong> - <strong>{{ Math.min(currentPage * itemsPerPage, filteredChallenges.length) }}</strong> of <strong>{{ filteredChallenges.length }}</strong> challenges</span>
         </div>
       </div>
     </div>
 
     <!-- Loading State -->
-    <div *ngIf="loading" class="text-center py-20">
-      <div class="inline-block w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-      <p class="mt-4 text-gray-600">Loading challenges...</p>
+    <div *ngIf="loading" class="loading-state">
+      <div class="loading-spinner">
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+      </div>
+      <p class="loading-text">Loading challenges...</p>
     </div>
 
     <!-- Empty State -->
-    <div *ngIf="!loading && filteredChallenges.length === 0" class="text-center py-20">
-      <div class="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
-        <svg class="w-12 h-12 text-gray-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <div *ngIf="!loading && filteredChallenges.length === 0" class="empty-state">
+      <div class="empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <circle cx="11" cy="11" r="8"></circle>
           <path d="m21 21-4.35-4.35"></path>
         </svg>
       </div>
-      <h3 class="text-2xl font-semibold text-gray-900 mb-2">No challenges found</h3>
-      <p class="text-gray-600 mb-6">Try adjusting your filters or search terms</p>
+      <h3 class="empty-title">No challenges found</h3>
+      <p class="empty-description">Try adjusting your filters or search terms to find what you're looking for</p>
       <button
         type="button"
         (click)="onSearchChanged(''); onFiltersChanged({ category: 'All Categories', difficulty: 'All Levels', pointRange: { min: 0, max: Infinity }, sortBy: 'popular' })"
-        class="px-6 py-3 rounded-xl bg-primary text-white font-medium hover:bg-primary-dark transition-all">
+        class="empty-action-btn">
         Clear All Filters
       </button>
     </div>
 
-    <!-- Challenges Grid -->
+    <!-- Challenges Grid/List -->
     <div *ngIf="!loading && filteredChallenges.length > 0" 
-         [class.grid]="viewMode === 'grid'"
-         [class.md:grid-cols-2]="viewMode === 'grid'"
-         [class.lg:grid-cols-3]="viewMode === 'grid'"
-         [class.gap-6]="viewMode === 'grid'"
-         [class.space-y-4]="viewMode === 'list'"
-         class="mb-12">
-      <div *ngFor="let challenge of displayedChallenges" 
-           class="transform hover:scale-105 transition-transform duration-200">
+         [class.challenges-grid]="viewMode === 'grid'"
+         [class.challenges-list]="viewMode === 'list'"
+         class="challenges-container">
+      <div *ngFor="let challenge of displayedChallenges; let i = index" 
+           class="challenge-item"
+           [style.animation-delay.ms]="i * 50">
         <app-challenge-card
           [challenge]="challenge"
           (joinClicked)="onJoinChallenge($event)">
@@ -129,91 +114,80 @@
     </div>
 
     <!-- Pagination -->
-    <div *ngIf="!loading && totalPages > 1" class="flex items-center justify-center gap-2">
-      
-      <!-- Previous Button -->
-      <button
-        type="button"
-        (click)="goToPage(currentPage - 1)"
-        [disabled]="currentPage === 1"
-        [class.opacity-50]="currentPage === 1"
-        [class.cursor-not-allowed]="currentPage === 1"
-        class="px-4 py-2 rounded-xl border-2 border-gray-300 text-gray-900 font-medium hover:border-primary hover:text-primary transition-all disabled:hover:border-gray-300 disabled:hover:text-gray-900">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-      </button>
+    <div *ngIf="!loading && totalPages > 1" class="pagination-wrapper">
+      <div class="pagination">
+        <button
+          type="button"
+          (click)="goToPage(currentPage - 1)"
+          [disabled]="currentPage === 1"
+          class="pagination-btn pagination-prev"
+          aria-label="Previous page">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
 
-      <!-- First Page -->
-      <button
-        *ngIf="visiblePages[0] > 1"
-        type="button"
-        (click)="goToPage(1)"
-        class="px-4 py-2 rounded-xl border-2 border-gray-300 text-gray-900 font-medium hover:border-primary hover:text-primary transition-all">
-        1
-      </button>
+        <div class="pagination-numbers">
+          <button
+            *ngIf="visiblePages[0] > 1"
+            type="button"
+            (click)="goToPage(1)"
+            class="pagination-number">
+            1
+          </button>
 
-      <!-- Ellipsis -->
-      <span *ngIf="visiblePages[0] > 2" class="text-gray-600">...</span>
+          <span *ngIf="visiblePages[0] > 2" class="pagination-ellipsis">...</span>
 
-      <!-- Page Numbers -->
-      <button
-        *ngFor="let page of visiblePages"
-        type="button"
-        (click)="goToPage(page)"
-        [class.bg-primary]="currentPage === page"
-        [class.text-white]="currentPage === page"
-        [class.border-primary]="currentPage === page"
-        [class.border-gray-300]="currentPage !== page"
-        [class.text-gray-900]="currentPage !== page"
-        class="px-4 py-2 rounded-xl border-2 font-medium hover:border-primary transition-all">
-        {{ page }}
-      </button>
+          <button
+            *ngFor="let page of visiblePages"
+            type="button"
+            (click)="goToPage(page)"
+            [class.active]="currentPage === page"
+            class="pagination-number">
+            {{ page }}
+          </button>
 
-      <!-- Ellipsis -->
-      <span *ngIf="visiblePages[visiblePages.length - 1] < totalPages - 1" class="text-gray-600">...</span>
+          <span *ngIf="visiblePages[visiblePages.length - 1] < totalPages - 1" class="pagination-ellipsis">...</span>
 
-      <!-- Last Page -->
-      <button
-        *ngIf="visiblePages[visiblePages.length - 1] < totalPages"
-        type="button"
-        (click)="goToPage(totalPages)"
-        class="px-4 py-2 rounded-xl border-2 border-gray-300 text-gray-900 font-medium hover:border-primary hover:text-primary transition-all">
-        {{ totalPages }}
-      </button>
+          <button
+            *ngIf="visiblePages[visiblePages.length - 1] < totalPages"
+            type="button"
+            (click)="goToPage(totalPages)"
+            class="pagination-number">
+            {{ totalPages }}
+          </button>
+        </div>
 
-      <!-- Next Button -->
-      <button
-        type="button"
-        (click)="goToPage(currentPage + 1)"
-        [disabled]="currentPage === totalPages"
-        [class.opacity-50]="currentPage === totalPages"
-        [class.cursor-not-allowed]="currentPage === totalPages"
-        class="px-4 py-2 rounded-xl border-2 border-gray-300 text-gray-900 font-medium hover:border-primary hover:text-primary transition-all disabled:hover:border-gray-300 disabled:hover:text-gray-900">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-      </button>
+        <button
+          type="button"
+          (click)="goToPage(currentPage + 1)"
+          [disabled]="currentPage === totalPages"
+          class="pagination-btn pagination-next"
+          aria-label="Next page">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- CTA Section -->
-    <div *ngIf="!loading && filteredChallenges.length > 0" 
-         class="mt-20 text-center bg-gradient-to-r from-primary to-primary-dark rounded-3xl p-12 text-white relative overflow-hidden">
-      <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
-      <div class="absolute bottom-0 left-0 w-48 h-48 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+    <div *ngIf="!loading && filteredChallenges.length > 0" class="cta-section">
+      <div class="cta-background">
+        <div class="cta-orb cta-orb-1"></div>
+        <div class="cta-orb cta-orb-2"></div>
+      </div>
       
-      <div class="relative z-10">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">
-          Can't find what you're looking for?
-        </h2>
-        <p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+      <div class="cta-content">
+        <h2 class="cta-title">Can't find what you're looking for?</h2>
+        <p class="cta-description">
           Suggest a new challenge or create your own custom challenge for the community
         </p>
-        <div class="flex flex-wrap items-center justify-center gap-4">
-          <button type="button" class="px-8 py-4 rounded-xl bg-white text-primary font-semibold hover:bg-gray-100 transition-all shadow-xl">
+        <div class="cta-buttons">
+          <button type="button" class="cta-btn-primary">
             Suggest a Challenge
           </button>
-          <button type="button" class="px-8 py-4 rounded-xl border-2 border-white text-white font-semibold hover:bg-white hover:text-primary transition-all">
+          <button type="button" class="cta-btn-secondary">
             Create Custom Challenge
           </button>
         </div>
