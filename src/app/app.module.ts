@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { HomeComponent } from './features/home/home.component';
-
+import { ChallengeCreatorComponent } from './features/challenges/challengeCreator/challenge-creator.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -14,7 +14,8 @@ import { HomeComponent } from './features/home/home.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SharedModule
+    SharedModule,
+    ChallengeCreatorComponent
   ],
   providers: [],
   bootstrap: [AppComponent]

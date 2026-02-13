@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Challenge } from '@core/models/challenge.model';
 import { ChallengesDataService } from '../../services/challenges-data.service';
 import { ChallengeFilters } from '../challenge-filters/challenge-filters.component';
@@ -33,7 +34,10 @@ export class ChallengesListComponent implements OnInit {
   Math = Math;
   Infinity = Infinity;
 
-  constructor(private challengesDataService: ChallengesDataService) {}
+  constructor(
+    private challengesDataService: ChallengesDataService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loadChallenges();
@@ -125,8 +129,7 @@ export class ChallengesListComponent implements OnInit {
   }
 
   onJoinChallenge(challengeId: string): void {
-    console.log('Joining challenge:', challengeId);
-    // Implement join logic here
+    this.router.navigate(['/challenges/participate'], { queryParams: { id: challengeId } });
   }
 
   toggleViewMode(): void {

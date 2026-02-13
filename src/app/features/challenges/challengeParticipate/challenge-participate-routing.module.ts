@@ -1,18 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ChallengesListComponent } from './components/challenges-list/challenges-list.component';
+import { ChallengeParticipateComponent } from './challenge-participate.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ChallengesListComponent
-  },
-  
- 
+    component: ChallengeParticipateComponent
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ChallengesRoutingModule { }
+export class ChallengeParticipateRoutingModule { }
