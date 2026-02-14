@@ -45,12 +45,30 @@ export class ChallengesListComponent implements OnInit {
 
   loadChallenges(): void {
     this.loading = true;
-    // Simulate API call
-    setTimeout(() => {
-      this.allChallenges = this.challengesDataService.getMockChallenges();
-      this.applyFiltersAndSearch();
-      this.loading = false;
-    }, 300);
+    const filters = this.buildApiFilters();
+    this.challengesDataService.getChallenges(filters).subscribe({
+      next: (challenges) => {
+        this.allChallenges = challenges ?? [];
+        this.applyFiltersAndSearch();
+        this.loading = false;
+      },
+      error: () => {
+        this.allChallenges = [];
+        this.applyFiltersAndSearch();
+        this.loading = false;
+      }
+    });
+  }
+
+  private buildApiFilters(): { difficulty?: string; category?: string; status?: string } | undefined {
+    const filters: { difficulty?: string; category?: string; status?: string } = {};
+    if (this.currentFilters.category !== 'All Categories') {
+      filters.category = this.currentFilters.category;
+    }
+    if (this.currentFilters.difficulty !== 'All Levels') {
+      filters.difficulty = this.currentFilters.difficulty;
+    }
+    return Object.keys(filters).length > 0 ? filters : undefined;
   }
 
   onSearchChanged(searchTerm: string): void {
@@ -90,8 +108,8 @@ export class ChallengesListComponent implements OnInit {
     // Apply points filter
     if (this.currentFilters.pointRange.min > 0 || this.currentFilters.pointRange.max < Infinity) {
       result = result.filter(c =>
-        c.points >= this.currentFilters.pointRange.min &&
-        c.points <= this.currentFilters.pointRange.max
+        (c.points ?? 0) >= this.currentFilters.pointRange.min &&
+        (c.points ?? 0) <= this.currentFilters.pointRange.max
       );
     }
 
@@ -108,11 +126,11 @@ export class ChallengesListComponent implements OnInit {
     
     switch (sortBy) {
       case 'popular':
-        return sorted.sort((a, b) => b.participants - a.participants);
+        return sorted.sort((a, b) => (b.participants ?? 0) - (a.participants ?? 0));
       case 'points-high':
-        return sorted.sort((a, b) => b.points - a.points);
+        return sorted.sort((a, b) => (b.points ?? 0) - (a.points ?? 0));
       case 'points-low':
-        return sorted.sort((a, b) => a.points - b.points);
+        return sorted.sort((a, b) => (a.points ?? 0) - (b.points ?? 0));
       case 'newest':
         return sorted.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
       case 'oldest':

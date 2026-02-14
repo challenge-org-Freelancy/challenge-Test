@@ -504,6 +504,21 @@
   }
   
   /* ============================================
+     FORM ERROR
+     ============================================ */
+  
+  .form-error {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: rgba(255, 107, 107, 0.15);
+    border: 1px solid rgba(255, 107, 107, 0.4);
+    border-radius: var(--radius-sm);
+    color: #c53030;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  /* ============================================
      FORM ACTIONS
      ============================================ */
   
@@ -1025,4 +1040,89 @@
   
   .input-with-icon .form-input:focus ~ .input-icon {
     color: var(--teal-500);
+  }
+
+  /* Image upload area */
+  .image-upload-input {
+    display: none;
+  }
+
+  .image-upload-area {
+    min-height: 180px;
+    border: 2px dashed rgba(45, 149, 150, 0.3);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .image-upload-area:hover,
+  .image-upload-area.has-image:hover {
+    border-color: var(--teal-500);
+    background: rgba(255, 255, 255, 0.8);
+  }
+
+  .image-upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 24px;
+    color: var(--text-light);
+  }
+
+  .image-upload-placeholder svg {
+    width: 48px;
+    height: 48px;
+    color: var(--teal-400);
+    opacity: 0.8;
+  }
+
+  .upload-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-medium);
+  }
+
+  .upload-hint {
+    font-size: 12px;
+    color: var(--text-lighter);
+  }
+
+  .image-preview {
+    max-width: 100%;
+    max-height: 200px;
+    object-fit: contain;
+  }
+
+  .image-remove-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .image-remove-btn:hover {
+    background: var(--pink-500);
+  }
+
+  .image-remove-btn svg {
+    width: 18px;
+    height: 18px;
   }

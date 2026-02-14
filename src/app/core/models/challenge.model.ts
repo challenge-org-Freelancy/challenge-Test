@@ -1,22 +1,27 @@
 export interface Challenge {
-  id: string;
+  id: string;                     // maps from backend idChallenge
   title: string;
   description: string;
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  points: number;
-  participants: number;
-  progress?: number;
   category: string;
-  status: 'Active' | 'InProgress' | 'Completed' | 'Closed';
+  technology?: string;
+  startDate?: Date;
+  endDate?: Date;
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  status: 'DRAFT' | 'Active' | 'InProgress' | 'Completed' | 'Closed';
+  maxParticipants?: number;
+  points?: number;
+  participants?: number;
+  progress?: number;
+  githubUrl?: string;
+  image?: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface ChallengeDetail extends Challenge {
-  requirements: string[];
-  resources: Resource[];
-  submissions: number;
-  deadline?: Date;
+  requirements?: string[];
+  resources?: Resource[];
+  submissions?: number;
 }
 
 export interface Resource {

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '@environments/environment';
 import { Challenge, ChallengeDetail } from '../models/challenge.model';
 
@@ -22,31 +22,112 @@ export class ChallengeService {
   }): Observable<Challenge[]> {
     let params = new HttpParams();
     
-    if (filters?.difficulty) {
-      params = params.set('difficulty', filters.difficulty);
-    }
-    if (filters?.category) {
-      params = params.set('category', filters.category);
-    }
-    if (filters?.status) {
-      params = params.set('status', filters.status);
-    }
+    if (filters?.difficulty) params = params.set('difficulty', filters.difficulty);
+    if (filters?.category) params = params.set('category', filters.category);
+    if (filters?.status) params = params.set('status', filters.status);
 
-    return this.http.get<Challenge[]>(this.apiUrl, { params });
-  }
-
-  /**
-   * Get featured challenges
-   */
-  getFeaturedChallenges(): Observable<Challenge[]> {
-    return this.http.get<Challenge[]>(`${this.apiUrl}/featured`);
+    return this.http.get<any>(this.apiUrl, { params }).pipe(
+      map(response => {
+        const challenges = Array.isArray(response) ? response : (response?.content ?? []);
+        return challenges.map((c: any) => ({
+          id: String(c.id ?? c.idChallenge ?? ''),
+          title: c.title,
+          description: c.description,
+          category: c.category,
+          technology: c.technology,
+          startDate: c.startDate ? new Date(c.startDate) : undefined,
+          endDate: c.endDate ? new Date(c.endDate) : undefined,
+          difficulty: c.difficulty,
+          status: c.status,
+          maxParticipants: c.maxParticipants,
+          points: c.points ?? 0,
+          participants: c.participants ?? 0,
+          progress: c.progress ?? 0,
+          githubUrl: c.githubUrl,
+          image: c.image ?? c.imageUrl ?? c.img,
+          createdAt: c.createdAt ? new Date(c.createdAt) : new Date(),
+          updatedAt: c.updatedAt ? new Date(c.updatedAt) : new Date()
+        }));
+      })
+    );
   }
 
   /**
    * Get challenge by ID
    */
   getChallengeById(id: string): Observable<ChallengeDetail> {
-    return this.http.get<ChallengeDetail>(`${this.apiUrl}/${id}`);
+    return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(
+      map(c => ({
+        id: c.idChallenge ?? c.id,
+        title: c.title,
+        description: c.description,
+        category: c.category,
+        technology: c.technology,
+        startDate: c.startDate ? new Date(c.startDate) : undefined,
+        endDate: c.endDate ? new Date(c.endDate) : undefined,
+        difficulty: c.difficulty,
+        status: c.status,
+        maxParticipants: c.maxParticipants,
+        points: c.points ?? 0,
+        participants: c.participants ?? 0,
+        progress: c.progress ?? 0,
+        githubUrl: c.githubUrl,
+        image: c.image ?? c.imageUrl ?? c.img,
+        createdAt: new Date(c.createdAt),
+        updatedAt: new Date(c.updatedAt),
+        requirements: c.requirements ?? [],
+        resources: c.resources ?? [],
+        submissions: c.submissions ?? 0
+      }))
+    );
+  }
+
+  /**
+   * Add a new challenge
+   */
+  addChallenge(challenge: Record<string, any>): Observable<Challenge> {
+    const raw: Record<string, any> = {
+      title: challenge['title'],
+      description: challenge['description'],
+      category: challenge['category'] ?? challenge['technology'],
+      technology: challenge['technology'],
+      difficulty: challenge['difficulty'],
+      status: challenge['status'],
+      maxParticipants: Math.max(1, challenge['maxParticipants'] ?? 1),
+      startDate: challenge['startDate'] ? (challenge['startDate'] instanceof Date ? challenge['startDate'].toISOString() : challenge['startDate']) : null,
+      endDate: challenge['endDate'] ? (challenge['endDate'] instanceof Date ? challenge['endDate'].toISOString() : challenge['endDate']) : null,
+      points: challenge['points'] ?? 0,
+      requirements: challenge['requirements'] ?? [],
+      githubUrl: challenge['githubUrl'] || null,
+      image: challenge['image'] || null
+    };
+    // Omit null/empty string to avoid validation issues
+    const payload: Record<string, any> = {};
+    for (const [k, v] of Object.entries(raw)) {
+      if (v == null || v === '') continue;
+      payload[k] = v;
+    }
+    return this.http.post<any>(this.apiUrl, payload).pipe(
+      map(c => ({
+        id: c.idChallenge ?? c.id,
+        title: c.title,
+        description: c.description,
+        category: c.category,
+        technology: c.technology,
+        startDate: c.startDate ? new Date(c.startDate) : undefined,
+        endDate: c.endDate ? new Date(c.endDate) : undefined,
+        difficulty: c.difficulty,
+        status: c.status,
+        maxParticipants: c.maxParticipants,
+        points: c.points ?? 0,
+        participants: c.participants ?? 0,
+        progress: c.progress ?? 0,
+        githubUrl: c.githubUrl,
+        image: c.image ?? c.imageUrl ?? c.img,
+        createdAt: new Date(c.createdAt),
+        updatedAt: new Date(c.updatedAt)
+      }))
+    );
   }
 
   /**
@@ -67,6 +148,26 @@ export class ChallengeService {
    * Get user's enrolled challenges
    */
   getEnrolledChallenges(): Observable<Challenge[]> {
-    return this.http.get<Challenge[]>(`${this.apiUrl}/enrolled`);
+    return this.http.get<any[]>(`${this.apiUrl}/enrolled`).pipe(
+      map(challenges =>
+        challenges.map(c => ({
+          id: c.idChallenge,
+          title: c.title,
+          description: c.description,
+          category: c.category,
+          technology: c.technology,
+          startDate: c.startDate ? new Date(c.startDate) : undefined,
+          endDate: c.endDate ? new Date(c.endDate) : undefined,
+          difficulty: c.difficulty,
+          status: c.status,
+          maxParticipants: c.maxParticipants,
+          points: c.points ?? 0,
+          participants: c.participants ?? 0,
+          progress: c.progress ?? 0,
+          createdAt: new Date(c.createdAt),
+          updatedAt: new Date(c.updatedAt)
+        }))
+      )
+    );
   }
 }

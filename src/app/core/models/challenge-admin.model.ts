@@ -14,7 +14,10 @@ export interface ChallengeForm {
   difficulty: ChallengeDifficulty;
   status: ChallengeStatus;
   maxParticipants: number;
-  deadline: string;
+  startDate?: string;
+  endDate?: string;
+  image?: string;
+  githubUrl?: string;
   points: number;
   todoItems: TodoItem[];
 }
