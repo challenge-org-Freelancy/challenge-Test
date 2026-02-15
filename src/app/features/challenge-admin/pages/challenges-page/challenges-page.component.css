@@ -37,3 +37,12 @@
   padding-inline: calc(var(--spacing) * 6);
   padding-block: calc(var(--spacing) * 6);
 }
+
+/* Success toast animation */
+.animate-fade-in {
+  animation: saveToastFadeIn 0.3s ease-out;
+}
+@keyframes saveToastFadeIn {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}

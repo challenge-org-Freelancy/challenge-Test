@@ -16,6 +16,7 @@ import { EditChallengeModalComponent } from './components/edit-challenge-modal/e
 import { ParticipantsModalComponent } from './components/participants-modal/participants-modal.component';
 import { ModernChallengesGridComponent } from './components/modern-challenges-grid/modern-challenges-grid.component';
 import { SuccessModalComponent } from './components/success-modal/success-modal.component';
+import { DeleteConfirmationModalComponent } from './components/delete-confirmation-modal/delete-confirmation-modal.component';
 
 // Pages
 import { DashboardPageComponent } from './pages/dashboard/dashboard-page.component';
@@ -45,6 +46,7 @@ const routes: Routes = [
     ParticipantsModalComponent,
     ModernChallengesGridComponent,
     SuccessModalComponent,
+    DeleteConfirmationModalComponent,
     
     // Pages
     DashboardPageComponent,
@@ -67,7 +69,8 @@ const routes: Routes = [
     EditChallengeModalComponent,
     ParticipantsModalComponent,
     ModernChallengesGridComponent,
-    SuccessModalComponent
+    SuccessModalComponent,
+    DeleteConfirmationModalComponent
   ]
 })
 export class ChallengeAdminModule { }

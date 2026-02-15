@@ -22,9 +22,14 @@ export class ChallengesPreviewComponent implements OnChanges {
     this.filterRecentChallenges();
   }
 
+  private isActiveStatus(status: string | undefined): boolean {
+    const s = (status || '').toLowerCase();
+    return s === 'active';
+  }
+
   private filterRecentChallenges(): void {
     this.recentChallenges = this.challenges
-      .filter(c => c.status === 'Active')
+      .filter(c => this.isActiveStatus(c.status))
       .sort((a, b) => {
         const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
         const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
@@ -35,7 +40,7 @@ export class ChallengesPreviewComponent implements OnChanges {
 
   private calculateStats(): void {
     const total = this.challenges.length;
-    const active = this.challenges.filter(c => c.status === 'Active').length;
+    const active = this.challenges.filter(c => this.isActiveStatus(c.status)).length;
     const totalParticipants = this.challenges.reduce((sum, c) => sum + (c.participants || 0), 0);
     const avgCompletion = total > 0 
       ? Math.round(this.challenges.reduce((sum, c) => sum + (c.progress ?? c.completionRate ?? 0), 0) / total)
@@ -53,22 +58,20 @@ export class ChallengesPreviewComponent implements OnChanges {
   }
 
   getStatusColor(status?: string): string {
-    switch (status) {
-      case 'Active': return 'bg-green-500';
-      case 'Draft': return 'bg-gray-400';
-      case 'Closed': return 'bg-blue-500';
-      default: return 'bg-gray-400';
-    }
+    const s = (status || '').toLowerCase();
+    if (s === 'active') return 'bg-green-500';
+    if (s === 'draft') return 'bg-gray-400';
+    if (s === 'closed' || s === 'completed') return 'bg-blue-500';
+    return 'bg-gray-400';
   }
 
   getDifficultyColor(difficulty?: string): string {
-    switch (difficulty) {
-      case 'Beginner': return 'bg-emerald-100 text-emerald-700 border-emerald-200';
-      case 'Intermediate': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-      case 'Advanced': return 'bg-orange-100 text-orange-700 border-orange-200';
-      case 'Expert': return 'bg-red-100 text-red-700 border-red-200';
-      default: return 'bg-gray-100 text-gray-700 border-gray-200';
-    }
+    const d = (difficulty || '').toLowerCase();
+    if (d === 'beginner' || d === 'easy') return 'bg-emerald-100 text-emerald-700 border-emerald-200';
+    if (d === 'intermediate' || d === 'medium') return 'bg-yellow-100 text-yellow-700 border-yellow-200';
+    if (d === 'advanced') return 'bg-orange-100 text-orange-700 border-orange-200';
+    if (d === 'expert' || d === 'hard') return 'bg-red-100 text-red-700 border-red-200';
+    return 'bg-gray-100 text-gray-700 border-gray-200';
   }
 
   trackByChallenge(index: number, challenge: any): string {

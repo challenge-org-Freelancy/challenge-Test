@@ -34,11 +34,37 @@ export class ModernChallengesGridComponent implements OnChanges {
       return;
     }
     this.filteredChallenges = this.challenges.filter(challenge => {
-      const matchesCategory = this.filterCategory === 'all' || challenge.category === this.filterCategory;
-      const matchesStatus = this.filterStatus === 'all' || challenge.status === this.filterStatus;
-      const matchesDifficulty = this.filterDifficulty === 'all' || challenge.difficulty === this.filterDifficulty;
+      const matchesCategory = this.filterCategory === 'all' || this.normalizeForCompare(challenge.category) === this.normalizeForCompare(this.filterCategory);
+      const matchesStatus = this.filterStatus === 'all' || this.statusMatches(challenge.status, this.filterStatus);
+      const matchesDifficulty = this.filterDifficulty === 'all' || this.difficultyMatches(challenge.difficulty, this.filterDifficulty);
       return matchesCategory && matchesStatus && matchesDifficulty;
     });
+  }
+
+  private normalizeForCompare(val: string | undefined): string {
+    return (val || '').toLowerCase().trim();
+  }
+
+  private statusMatches(challengeStatus: string | undefined, filterStatus: string): boolean {
+    const c = this.normalizeForCompare(challengeStatus);
+    const f = this.normalizeForCompare(filterStatus);
+    if (c === f) return true;
+    return (f === 'closed' && (c === 'completed' || c === 'closed')) ||
+           (f === 'completed' && (c === 'completed' || c === 'closed'));
+  }
+
+  private difficultyMatches(challengeDifficulty: string | undefined, filterDifficulty: string): boolean {
+    const c = this.normalizeForCompare(challengeDifficulty);
+    const f = this.normalizeForCompare(filterDifficulty);
+    if (c === f) return true;
+    const aliasMap: Record<string, string[]> = {
+      'beginner': ['easy'],
+      'intermediate': ['medium'],
+      'advanced': [],
+      'expert': ['hard']
+    };
+    const aliases = aliasMap[f] || [];
+    return aliases.includes(c) || (aliasMap[c] && aliasMap[c].includes(f));
   }
 
   onFilterChange(): void {
@@ -77,20 +103,26 @@ export class ModernChallengesGridComponent implements OnChanges {
   }
 
   getStatusColor(status?: string): string {
-    switch (status) {
-      case 'Active': return 'bg-green-500 text-white shadow-lg backdrop-blur-sm';
-      case 'Draft': return 'bg-gray-400 text-white shadow-lg backdrop-blur-sm';
-      case 'Closed': return 'bg-blue-500 text-white shadow-lg backdrop-blur-sm';
+    const s = (status || '').toLowerCase();
+    switch (s) {
+      case 'active': return 'bg-green-500 text-white shadow-lg backdrop-blur-sm';
+      case 'draft': return 'bg-gray-400 text-white shadow-lg backdrop-blur-sm';
+      case 'closed':
+      case 'completed': return 'bg-blue-500 text-white shadow-lg backdrop-blur-sm';
       default: return 'bg-gray-400 text-white shadow-lg backdrop-blur-sm';
     }
   }
 
   getDifficultyColor(difficulty?: string): string {
-    switch (difficulty) {
-      case 'Beginner': return 'bg-emerald-100 text-emerald-700 border-emerald-200 border backdrop-blur-sm';
-      case 'Intermediate': return 'bg-yellow-100 text-yellow-700 border-yellow-200 border backdrop-blur-sm';
-      case 'Advanced': return 'bg-orange-100 text-orange-700 border-orange-200 border backdrop-blur-sm';
-      case 'Expert': return 'bg-red-100 text-red-700 border-red-200 border backdrop-blur-sm';
+    const d = (difficulty || '').toLowerCase();
+    switch (d) {
+      case 'beginner':
+      case 'easy': return 'bg-emerald-100 text-emerald-700 border-emerald-200 border backdrop-blur-sm';
+      case 'intermediate':
+      case 'medium': return 'bg-yellow-100 text-yellow-700 border-yellow-200 border backdrop-blur-sm';
+      case 'advanced': return 'bg-orange-100 text-orange-700 border-orange-200 border backdrop-blur-sm';
+      case 'expert':
+      case 'hard': return 'bg-red-100 text-red-700 border-red-200 border backdrop-blur-sm';
       default: return 'bg-gray-100 text-gray-700 border-gray-200 border backdrop-blur-sm';
     }
   }

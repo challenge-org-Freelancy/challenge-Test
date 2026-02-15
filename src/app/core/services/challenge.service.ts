@@ -136,6 +136,64 @@ export class ChallengeService {
   }
 
   /**
+   * Update an existing challenge
+   */
+  updateChallenge(id: string, challenge: Record<string, any>): Observable<Challenge> {
+    const img = challenge['image'] || null;
+    const trimmed = img && typeof img === 'string' ? img.trim() : '';
+    const imageForDb = trimmed.length > 0 && trimmed.length <= 60000 ? trimmed : null;
+
+    const startDate = challenge['startDate'];
+    const endDate = challenge['endDate'];
+    const toIso = (v: any) => !v ? null : (v instanceof Date ? v.toISOString() : v);
+
+    const payload: Record<string, any> = {
+      idChallenge: challenge['idChallenge'] ?? id,
+      title: challenge['title'] ?? '',
+      description: challenge['description'] ?? '',
+      category: challenge['category'] ?? '',
+      technology: challenge['technology'] ?? '',
+      difficulty: challenge['difficulty'] ?? 'BEGINNER',
+      status: challenge['status'] ?? 'DRAFT',
+      maxParticipants: Math.max(1, Number(challenge['maxParticipants']) || 100),
+      points: Math.max(0, Number(challenge['points']) || 100),
+      githubUrl: challenge['githubUrl'] ?? null,
+      startDate: toIso(startDate),
+      endDate: toIso(endDate),
+      image: imageForDb
+    };
+
+    return this.http.put<any>(`${this.apiUrl}/${id}`, payload).pipe(
+      map(c => ({
+        id: String(c.idChallenge ?? c.id ?? id),
+        title: c.title,
+        description: c.description,
+        category: c.category,
+        technology: c.technology,
+        startDate: c.startDate ? new Date(c.startDate) : undefined,
+        endDate: c.endDate ? new Date(c.endDate) : undefined,
+        difficulty: c.difficulty,
+        status: c.status,
+        maxParticipants: c.maxParticipants,
+        points: c.points ?? 0,
+        participants: c.participants ?? 0,
+        progress: c.progress ?? 0,
+        githubUrl: c.githubUrl,
+        image: c.image ?? c.imageUrl ?? c.img,
+        createdAt: c.createdAt ? new Date(c.createdAt) : new Date(),
+        updatedAt: c.updatedAt ? new Date(c.updatedAt) : new Date()
+      }))
+    );
+  }
+
+  /**
+   * Delete a challenge
+   */
+  deleteChallenge(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  /**
    * Join a challenge
    */
   joinChallenge(challengeId: string): Observable<void> {

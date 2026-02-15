@@ -13,7 +13,13 @@ export class ChallengesPageComponent implements OnInit {
   filteredChallenges: any[] = [];
   searchTerm = '';
   isEditModalOpen: boolean = false;
+  showSaveSuccess = false;
+  isLoading = true;
+  loadError: string | null = null;
+  private saveSuccessTimeout: ReturnType<typeof setTimeout> | null = null;
   isParticipantsModalOpen: boolean = false;
+  isDeleteModalOpen = false;
+  challengeToDelete: any = null;
   selectedChallenge: any = null;
   selectedChallengeParticipants: Participant[] = [];
 
@@ -23,10 +29,7 @@ export class ChallengesPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.challengeAdminService.getChallenges().subscribe(challenges => {
-      this.challenges = challenges;
-      this.applySearch();
-    });
+    this.refreshChallenges();
   }
 
   onBack(): void {
@@ -65,13 +68,26 @@ export class ChallengesPageComponent implements OnInit {
   }
 
   onSaveChallenge(updatedChallenge: any): void {
-    this.challengeAdminService.updateChallenge(updatedChallenge);
-    this.isEditModalOpen = false;
-    this.selectedChallenge = null;
-    this.challengeAdminService.getChallenges().subscribe(challenges => {
-      this.challenges = challenges;
-      this.applySearch();
+    this.challengeAdminService.updateChallenge(updatedChallenge).subscribe({
+      next: () => {
+        this.isEditModalOpen = false;
+        this.selectedChallenge = null;
+        this.refreshChallenges();
+        this.showSaveSuccessToast();
+      },
+      error: () => {
+        this.refreshChallenges();
+      }
     });
+  }
+
+  private showSaveSuccessToast(): void {
+    if (this.saveSuccessTimeout) clearTimeout(this.saveSuccessTimeout);
+    this.showSaveSuccess = true;
+    this.saveSuccessTimeout = setTimeout(() => {
+      this.showSaveSuccess = false;
+      this.saveSuccessTimeout = null;
+    }, 3000);
   }
 
   onCloseEditModal(): void {
@@ -80,17 +96,9 @@ export class ChallengesPageComponent implements OnInit {
   }
 
   onDuplicateChallenge(challenge: any): void {
-    const duplicated = {
-      ...challenge,
-      id: `${challenge.id}-copy`,
-      title: `${challenge.title} (Copy)`,
-      status: 'Draft',
-      createdAt: new Date()
-    };
-    this.challengeAdminService.updateChallenge(duplicated);
-    this.challengeAdminService.getChallenges().subscribe(challenges => {
-      this.challenges = challenges;
-      this.applySearch();
+    this.challengeAdminService.duplicateChallenge(challenge).subscribe({
+      next: () => this.refreshChallenges(),
+      error: () => this.refreshChallenges()
     });
   }
 
@@ -111,8 +119,51 @@ export class ChallengesPageComponent implements OnInit {
   }
 
   onDeleteChallenge(challenge: any): void {
-    if (confirm(`Are you sure you want to delete "${challenge.title}"? This action cannot be undone.`)) {
-      this.challengeAdminService.deleteChallenge(challenge.id);
+    this.challengeToDelete = challenge;
+    this.isDeleteModalOpen = true;
+  }
+
+  onConfirmDelete(): void {
+    if (this.challengeToDelete) {
+      this.challengeAdminService.deleteChallenge(this.challengeToDelete.id).subscribe({
+        next: () => {
+          this.isDeleteModalOpen = false;
+          this.challengeToDelete = null;
+          this.refreshChallenges();
+        },
+        error: () => {
+          this.isDeleteModalOpen = false;
+          this.challengeToDelete = null;
+          this.refreshChallenges();
+        }
+      });
     }
+  }
+
+  onCancelDelete(): void {
+    this.isDeleteModalOpen = false;
+    this.challengeToDelete = null;
+  }
+
+  private refreshChallenges(): void {
+    this.isLoading = true;
+    this.loadError = null;
+    this.challengeAdminService.getChallenges().subscribe({
+      next: challenges => {
+        this.challenges = challenges;
+        this.applySearch();
+        this.isLoading = false;
+      },
+      error: err => {
+        this.isLoading = false;
+        this.loadError = 'Could not load challenges. Is the backend server running on port 8080?';
+        this.challenges = [];
+        this.applySearch();
+      }
+    });
+  }
+
+  onRetryLoad(): void {
+    this.refreshChallenges();
   }
 }
