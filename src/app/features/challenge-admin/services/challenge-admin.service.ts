@@ -201,6 +201,98 @@ export class ChallengeAdminService {
   }
 
   private getMockParticipants(_challengeId: string): Participant[] {
-    return [];
+    return [
+      {
+        id: 'p1',
+        name: 'Sarah Chen',
+        email: 'sarah.chen@example.com',
+        enrolledDate: '2026-02-01',
+        progress: 100,
+        tasksCompleted: 5,
+        totalTasks: 5,
+        status: 'Completed',
+        lastActivity: '2026-02-12'
+      },
+      {
+        id: 'p2',
+        name: 'Marcus Johnson',
+        email: 'marcus.j@example.com',
+        avatar: 'https://i.pravatar.cc/150?u=marcus',
+        enrolledDate: '2026-02-03',
+        progress: 80,
+        tasksCompleted: 4,
+        totalTasks: 5,
+        status: 'Active',
+        lastActivity: '2026-02-13'
+      },
+      {
+        id: 'p3',
+        name: 'Emma Wilson',
+        email: 'emma.wilson@example.com',
+        enrolledDate: '2026-02-05',
+        progress: 60,
+        tasksCompleted: 3,
+        totalTasks: 5,
+        status: 'Active',
+        lastActivity: '2026-02-11'
+      },
+      {
+        id: 'p4',
+        name: 'Alex Rivera',
+        email: 'alex.rivera@example.com',
+        avatar: 'https://i.pravatar.cc/150?u=alex',
+        enrolledDate: '2026-02-02',
+        progress: 40,
+        tasksCompleted: 2,
+        totalTasks: 5,
+        status: 'Active',
+        lastActivity: '2026-02-10'
+      },
+      {
+        id: 'p5',
+        name: 'Jordan Taylor',
+        email: 'jordan.t@example.com',
+        enrolledDate: '2026-02-08',
+        progress: 20,
+        tasksCompleted: 1,
+        totalTasks: 5,
+        status: 'Active',
+        lastActivity: '2026-02-09'
+      },
+      {
+        id: 'p6',
+        name: 'Casey Thompson',
+        email: 'casey.t@example.com',
+        enrolledDate: '2026-02-04',
+        progress: 0,
+        tasksCompleted: 0,
+        totalTasks: 5,
+        status: 'Dropped',
+        lastActivity: '2026-02-06'
+      },
+      {
+        id: 'p7',
+        name: 'Riley Martinez',
+        email: 'riley.m@example.com',
+        avatar: 'https://i.pravatar.cc/150?u=riley',
+        enrolledDate: '2026-02-01',
+        progress: 100,
+        tasksCompleted: 5,
+        totalTasks: 5,
+        status: 'Completed',
+        lastActivity: '2026-02-12'
+      },
+      {
+        id: 'p8',
+        name: 'Morgan Lee',
+        email: 'morgan.lee@example.com',
+        enrolledDate: '2026-02-07',
+        progress: 60,
+        tasksCompleted: 3,
+        totalTasks: 5,
+        status: 'Active',
+        lastActivity: '2026-02-13'
+      }
+    ];
   }
 }
