@@ -2,21 +2,30 @@
   <app-header></app-header>
   
   <!-- Page Header Section -->
-  <section class="page-header-section">
-    <div class="header-container">
-      <div class="header-title-section">
-        <h1 class="page-title">Explore Challenges</h1>
-        <p class="page-subtitle">Discover curated challenges to enhance your skills and build your portfolio</p>
+  <section class="challenge-header-card">
+    <div class="gradient-overlay"></div>
+    <div class="decorative-circles">
+      <div class="circle circle-1"></div>
+      <div class="circle circle-2"></div>
+      <div class="circle circle-3"></div>
+    </div>
+    <div class="content-wrapper">
+      <div class="icon-wrapper">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+        </svg>
       </div>
-      
-      <!-- Search Bar -->
-      <div class="search-section">
-        <div class="search-wrapper">
-          <app-challenge-search (searchChanged)="onSearchChanged($event)"></app-challenge-search>
-        </div>
-      </div>
+      <h1 class="challenge-title">Explore Challenges</h1>
+      <p class="challenge-description">Discover curated challenges to enhance your skills and build your portfolio</p>
     </div>
   </section>
+
+  <!-- Search Bar - Below Header -->
+  <div class="search-section-below">
+    <div class="search-wrapper">
+      <app-challenge-search (searchChanged)="onSearchChanged($event)"></app-challenge-search>
+    </div>
+  </div>
 
   <!-- Main Content -->
   <div class="main-content">

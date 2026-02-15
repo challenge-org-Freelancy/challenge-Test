@@ -88,10 +88,11 @@ export class ChallengesListComponent implements OnInit {
 
     // Apply search
     if (this.searchTerm) {
+      const term = this.searchTerm.toLowerCase();
       result = result.filter(challenge =>
-        challenge.title.toLowerCase().includes(this.searchTerm) ||
-        challenge.description.toLowerCase().includes(this.searchTerm) ||
-        challenge.category.toLowerCase().includes(this.searchTerm)
+        (challenge.title ?? '').toLowerCase().includes(term) ||
+        (challenge.description ?? '').toLowerCase().includes(term) ||
+        (challenge.category ?? '').toLowerCase().includes(term)
       );
     }
 
@@ -132,9 +133,9 @@ export class ChallengesListComponent implements OnInit {
       case 'points-low':
         return sorted.sort((a, b) => (a.points ?? 0) - (b.points ?? 0));
       case 'newest':
-        return sorted.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+        return sorted.sort((a, b) => (b.createdAt ?? new Date(0)).getTime() - (a.createdAt ?? new Date(0)).getTime());
       case 'oldest':
-        return sorted.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+        return sorted.sort((a, b) => (a.createdAt ?? new Date(0)).getTime() - (b.createdAt ?? new Date(0)).getTime());
       default:
         return sorted;
     }

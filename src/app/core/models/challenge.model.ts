@@ -1,32 +1,107 @@
+// src/app/core/models/challenge.model.ts
+
+/** Challenge entity used for list/detail views and API responses */
 export interface Challenge {
-  id: string;                     // maps from backend idChallenge
+  id: string;
   title: string;
-  description: string;
-  category: string;
-  technology?: string;
+  description?: string;
+  category?: string;
+  technology?: string | string[];
   startDate?: Date;
   endDate?: Date;
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  status: 'DRAFT' | 'Active' | 'InProgress' | 'Completed' | 'Closed';
+  difficulty?: string;
+  status?: string;
   maxParticipants?: number;
   points?: number;
   participants?: number;
   progress?: number;
   githubUrl?: string;
   image?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
+/** Challenge detail extends Challenge with extra fields */
 export interface ChallengeDetail extends Challenge {
-  requirements?: string[];
-  resources?: Resource[];
+  requirements?: unknown[];
+  resources?: unknown[];
   submissions?: number;
 }
 
-export interface Resource {
+export interface Step {
+  id: number;
+  title: string;
+}
+
+export interface ChallengeInfo {
+  title: string;
+  description: string;
+  category: string;
+  technologies: string[];
+  difficulty: 'easy' | 'medium' | 'hard' | '';
+  image: string | null;
+}
+
+export interface GitHubChecklist {
+  orgCreated: boolean;
+  repoCreated: boolean;
+  readmeAdded: boolean;
+  forkEnabled: boolean;
+}
+
+export interface GitHubData {
+  repositoryUrl: string;
+  checklist: GitHubChecklist;
+}
+
+export interface Task {
   id: string;
   title: string;
-  url: string;
-  type: 'video' | 'article' | 'documentation';
+  description: string;
+  deadline: string;
+  order: number;
 }
+
+export interface SettingsData {
+  startDate: string;
+  endDate: string;
+  maxParticipants: string;
+  status: 'draft' | 'published' | 'closed' | '';
+}
+
+export interface ChallengeFormData {
+  challengeInfo: ChallengeInfo;
+  githubData: GitHubData;
+  tasks: Task[];
+  settings: SettingsData;
+}
+
+export const STEPS: Step[] = [
+  { id: 1, title: 'Challenge Information' },
+  { id: 2, title: 'GitHub Preparation' },
+  { id: 3, title: 'Tasks Creation' },
+  { id: 4, title: 'Settings & Limits' },
+  { id: 5, title: 'Review & Publish' }
+];
+
+export const CATEGORIES = [
+  'Web Development',
+  'Mobile Development',
+  'Machine Learning',
+  'DevOps',
+  'Data Science',
+  'Blockchain'
+];
+
+export const TECH_OPTIONS = [
+  'React',
+  'TypeScript',
+  'Node.js',
+  'Python',
+  'Go',
+  'Rust',
+  'Docker',
+  'Kubernetes',
+  'GraphQL',
+  'PostgreSQL'
+];

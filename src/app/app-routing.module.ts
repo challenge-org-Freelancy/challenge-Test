@@ -12,6 +12,10 @@ const routes: Routes = [
     component: ChallengeCreatorComponent
   },
   {
+    path: 'challenges/wizard',
+    loadChildren: () => import('./features/challenge-creation/challenge-creation.module').then(m => m.ChallengeCreationModule)
+  },
+  {
     path: 'challenges/participate',
     loadChildren: () => import('./features/challenges/challengeParticipate/challenge-participate.module').then(m => m.ChallengeParticipateModule)
   },
