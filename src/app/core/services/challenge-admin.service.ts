@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Challenge } from '@core/models/challenge.model';
-import { Participant } from '../models/participant.model';
+import { Participant } from '@core/models/participant.model';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ChallengeAdminService {
   private challengesSubject = new BehaviorSubject<Challenge[]>([]);
   public challenges$ = this.challengesSubject.asObservable();

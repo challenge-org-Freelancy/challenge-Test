@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './features/home/home.component';
-import { ChallengeCreatorComponent } from './features/challenges/challengeCreator/challenge-creator.component';
+
 const routes: Routes = [
   {
     path: '',
@@ -9,7 +9,8 @@ const routes: Routes = [
   },
   {
     path: 'challenges/create',
-    component: ChallengeCreatorComponent
+    redirectTo: 'challenges/wizard',
+    pathMatch: 'full'
   },
   {
     path: 'challenges/wizard',

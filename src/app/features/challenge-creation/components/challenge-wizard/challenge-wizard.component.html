@@ -60,9 +60,20 @@
         </div>
       </div>
   
+      <!-- Error Message -->
+      <div *ngIf="errorMessage" class="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+        {{ errorMessage }}
+      </div>
+
       <!-- Navigation Buttons -->
       <div class="flex items-center justify-between mt-6">
-        <div>
+        <div class="flex items-center gap-3">
+          <button 
+            class="btn btn-outline"
+            [disabled]="submitting"
+            (click)="handleCancel()">
+            Cancel
+          </button>
           <button 
             *ngIf="currentStep > 1"
             class="btn btn-outline"
@@ -77,6 +88,7 @@
         <div class="flex items-center gap-3">
           <button 
             class="btn btn-outline"
+            [disabled]="submitting"
             (click)="handleSaveDraft()">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
@@ -87,7 +99,7 @@
           <button 
             *ngIf="currentStep < steps.length"
             class="btn btn-primary"
-            [disabled]="!isStepValid()"
+            [disabled]="!isStepValid() || submitting"
             (click)="handleNext()">
             Next Step
             <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,12 +110,12 @@
           <button 
             *ngIf="currentStep === steps.length"
             class="btn btn-accent"
-            [disabled]="!isStepValid()"
+            [disabled]="!isStepValid() || submitting"
             (click)="handlePublish()">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="btn-send-icon w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
             </svg>
-            Publish Challenge
+            Save Challenge
           </button>
         </div>
       </div>
@@ -113,7 +125,9 @@
     <app-success-modal
       [isOpen]="showSuccessModal"
       [challengeTitle]="formData.challengeInfo.title"
-      (close)="handleCloseSuccess()">
+      [challengeId]="createdChallengeId"
+      (close)="handleCloseSuccess()"
+      (viewPage)="handleViewPage()">
     </app-success-modal>
   </div>
   

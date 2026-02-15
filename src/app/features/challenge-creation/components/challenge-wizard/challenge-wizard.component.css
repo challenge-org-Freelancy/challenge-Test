@@ -210,4 +210,9 @@
   .btn-accent:hover:not(:disabled) {
     background-color: #66001a;
   }
+
+  .btn-send-icon {
+    transform: rotate(-45deg);
+    flex-shrink: 0;
+  }
   

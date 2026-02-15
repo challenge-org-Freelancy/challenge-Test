@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ChallengeStateService } from '../../services/challenge-state.service';
@@ -16,9 +17,15 @@ export class ChallengeWizardComponent implements OnInit, OnDestroy {
   steps: Step[] = STEPS;
   formData!: ChallengeFormData;
   showSuccessModal = false;
+  createdChallengeId = '';
+  submitting = false;
+  errorMessage = '';
   private destroy$ = new Subject<void>();
 
-  constructor(private challengeStateService: ChallengeStateService) {
+  constructor(
+    private challengeStateService: ChallengeStateService,
+    private router: Router
+  ) {
     this.formData = this.challengeStateService.getFormData();
   }
 
@@ -47,42 +54,73 @@ export class ChallengeWizardComponent implements OnInit, OnDestroy {
     }
   }
 
+  handleCancel(): void {
+    this.challengeStateService.resetForm();
+    this.router.navigate(['/admin/challenges']);
+  }
+
   goToStep(step: number): void {
     this.currentStep = step;
   }
 
   handleSaveDraft(): void {
+    this.errorMessage = '';
+    this.submitting = true;
     this.challengeStateService.saveDraft()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response: { message: string }) => {
+          this.submitting = false;
           alert(response.message);
+          this.router.navigate(['/admin/challenges']);
         },
-        error: (error: unknown) => {
-          console.error('Error saving draft:', error);
-          alert('Failed to save draft');
+        error: (err) => {
+          this.submitting = false;
+          console.error('Error saving draft:', err);
+          this.errorMessage = this.getErrorMessage(err);
         }
       });
   }
 
   handlePublish(): void {
+    this.errorMessage = '';
+    this.submitting = true;
     this.challengeStateService.publishChallenge()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
+        next: (challenge: { id?: string }) => {
+          this.submitting = false;
+          this.createdChallengeId = challenge?.id ? String(challenge.id) : '';
           this.showSuccessModal = true;
         },
-        error: (error: unknown) => {
-          console.error('Error publishing challenge:', error);
-          alert('Failed to publish challenge');
+        error: (err) => {
+          this.submitting = false;
+          console.error('Error publishing challenge:', err);
+          this.errorMessage = this.getErrorMessage(err);
         }
       });
   }
 
   handleCloseSuccess(): void {
     this.showSuccessModal = false;
+    this.createdChallengeId = '';
     this.challengeStateService.resetForm();
     this.currentStep = 1;
+    this.router.navigate(['/challenges/wizard']);
+  }
+
+  handleViewPage(): void {
+    this.showSuccessModal = false;
+    this.createdChallengeId = '';
+    this.challengeStateService.resetForm();
+    this.router.navigate(['/admin/challenges/all']);
+  }
+
+  private getErrorMessage(err: any): string {
+    const body = err?.error;
+    return typeof body === 'string' ? body
+      : body?.message || body?.error || (Array.isArray(body?.errors) ? body.errors.join(', ') : null)
+      || err?.message || 'An error occurred. Please try again.';
   }
 
   isStepValid(): boolean {

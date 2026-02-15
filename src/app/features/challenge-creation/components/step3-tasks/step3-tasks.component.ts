@@ -26,6 +26,10 @@ export class Step3TasksComponent implements OnInit {
     return this.data || [];
   }
 
+  trackByTaskId(_index: number, task: Task): string {
+    return task.id;
+  }
+
   addTask(): void {
     const newTask: Task = {
       id: `task-${Date.now()}`,

@@ -15,13 +15,11 @@ import { DeadlineAnalyticsComponent } from './components/deadline-analytics/dead
 import { EditChallengeModalComponent } from './components/edit-challenge-modal/edit-challenge-modal.component';
 import { ParticipantsModalComponent } from './components/participants-modal/participants-modal.component';
 import { ModernChallengesGridComponent } from './components/modern-challenges-grid/modern-challenges-grid.component';
+import { SuccessModalComponent } from './components/success-modal/success-modal.component';
 
 // Pages
 import { DashboardPageComponent } from './pages/dashboard/dashboard-page.component';
 import { ChallengesPageComponent } from './pages/challenges-page/challenges-page.component';
-
-// Services
-import { ChallengeAdminService } from './services/challenge-admin.service';
 
 const routes: Routes = [
   {
@@ -46,6 +44,7 @@ const routes: Routes = [
     EditChallengeModalComponent,
     ParticipantsModalComponent,
     ModernChallengesGridComponent,
+    SuccessModalComponent,
     
     // Pages
     DashboardPageComponent,
@@ -58,9 +57,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     BaseChartDirective
   ],
-  providers: [
-    ChallengeAdminService
-  ],
   exports: [
     DashboardHeaderComponent,
     QuickActionCardsComponent,
@@ -70,7 +66,8 @@ const routes: Routes = [
     DeadlineAnalyticsComponent,
     EditChallengeModalComponent,
     ParticipantsModalComponent,
-    ModernChallengesGridComponent
+    ModernChallengesGridComponent,
+    SuccessModalComponent
   ]
 })
 export class ChallengeAdminModule { }

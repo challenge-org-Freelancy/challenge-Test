@@ -25,6 +25,7 @@ export class Step4SettingsComponent implements OnInit, OnDestroy {
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
       maxParticipants: [''],
+      points: [''],
       status: ['draft', Validators.required]
     });
   }

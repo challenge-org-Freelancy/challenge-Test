@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ChallengeAdminService } from '../../services/challenge-admin.service';
-import { Participant } from '../../models/participant.model';
+import { ChallengeAdminService } from '@core/services/challenge-admin.service';
+import { Participant } from '@core/models/participant.model';
 
 @Component({
   selector: 'app-challenges-page',

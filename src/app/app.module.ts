@@ -8,7 +8,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { HomeComponent } from './features/home/home.component';
-import { ChallengeCreatorComponent } from './features/challenges/challengeCreator/challenge-creator.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,8 +18,7 @@ import { ChallengeCreatorComponent } from './features/challenges/challengeCreato
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
-    SharedModule,
-    ChallengeCreatorComponent
+    SharedModule
   ],
   providers: [provideCharts(withDefaultRegisterables())],
   bootstrap: [AppComponent]

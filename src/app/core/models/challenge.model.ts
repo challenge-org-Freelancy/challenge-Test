@@ -66,6 +66,7 @@ export interface SettingsData {
   startDate: string;
   endDate: string;
   maxParticipants: string;
+  points: string;
   status: 'draft' | 'published' | 'closed' | '';
 }
 

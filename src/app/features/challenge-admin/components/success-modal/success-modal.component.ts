@@ -1,18 +1,20 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-success-modal',
   templateUrl: './success-modal.component.html',
-  styleUrl: './success-modal.component.css'
+  styleUrls: ['./success-modal.component.css']
 })
 export class SuccessModalComponent {
   @Input() isOpen = false;
   @Input() challengeTitle = '';
   @Input() challengeId = '';
   @Output() close = new EventEmitter<void>();
-  @Output() viewPage = new EventEmitter<void>();
 
   copied = false;
+
+  constructor(private router: Router) {}
 
   get participationLink(): string {
     if (this.challengeId) {
@@ -34,7 +36,8 @@ export class SuccessModalComponent {
   }
 
   viewChallenge(): void {
-    this.viewPage.emit();
+    this.router.navigate(['/admin/challenges/all']);
+    this.close.emit();
   }
 
   onClose(): void {

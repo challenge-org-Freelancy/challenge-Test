@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ChallengeAdminService } from '../../services/challenge-admin.service';
+import { ChallengeAdminService } from '@core/services/challenge-admin.service';
 import { Challenge } from '@core/models/challenge.model';
 
 @Component({

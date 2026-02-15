@@ -79,20 +79,70 @@ export class Step1ChallengeInfoComponent implements OnInit, OnDestroy {
     this.updateState(updatedTechnologies);
   }
 
+  /** Max base64 length ~55KB to fit MySQL TEXT (64KB). JPEG quality adjusted to stay under limit. */
+  private readonly MAX_IMAGE_BYTES = 55000;
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
+      if (!file.type.startsWith('image/')) return;
+
       const reader = new FileReader();
-      
       reader.onload = (e: ProgressEvent<FileReader>) => {
-        const imageData = e.target?.result as string;
-        this.form.patchValue({ image: imageData });
-        this.updateState(undefined, imageData);
+        const dataUrl = e.target?.result as string;
+        this.compressImage(dataUrl).then(compressed => {
+          this.form.patchValue({ image: compressed });
+          this.updateState(undefined, compressed);
+        }).catch(() => {
+          this.form.patchValue({ image: null });
+          this.updateState(undefined, null);
+        });
       };
-      
       reader.readAsDataURL(file);
     }
+  }
+
+  private compressImage(dataUrl: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const maxW = 400;
+        const maxH = 300;
+        let w = img.width;
+        let h = img.height;
+        if (w > maxW || h > maxH) {
+          const r = Math.min(maxW / w, maxH / h);
+          w = Math.round(w * r);
+          h = Math.round(h * r);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject();
+          return;
+        }
+        ctx.drawImage(img, 0, 0, w, h);
+        let quality = 0.75;
+        let result = canvas.toDataURL('image/jpeg', quality);
+        while (result.length > this.MAX_IMAGE_BYTES && quality > 0.2) {
+          quality -= 0.1;
+          result = canvas.toDataURL('image/jpeg', quality);
+        }
+        if (result.length > this.MAX_IMAGE_BYTES) {
+          const scale = Math.sqrt(this.MAX_IMAGE_BYTES / result.length);
+          canvas.width = Math.max(100, Math.round(w * scale));
+          canvas.height = Math.max(75, Math.round(h * scale));
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          result = canvas.toDataURL('image/jpeg', 0.6);
+        }
+        resolve(result);
+      };
+      img.onerror = reject;
+      img.src = dataUrl;
+    });
   }
 
   removeImage(): void {

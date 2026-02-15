@@ -30,6 +30,7 @@ const mockFormData: ChallengeFormData = {
     startDate: '2025-01-01',
     endDate: '2025-02-01',
     maxParticipants: '10',
+    points: '100',
     status: 'draft'
   }
 };
@@ -51,7 +52,7 @@ describe('ChallengeWizardComponent', () => {
     mockChallengeStateService.getFormData.and.returnValue(mockFormData);
     mockChallengeStateService.formData$ = formDataSubject.asObservable();
     mockChallengeStateService.saveDraft.and.returnValue(of({ message: 'Draft saved' }));
-    mockChallengeStateService.publishChallenge.and.returnValue(of({}));
+    mockChallengeStateService.publishChallenge.and.returnValue(of({ id: '1', title: 'Test Challenge' }));
 
     await TestBed.configureTestingModule({
       imports: [CommonModule, NoopAnimationsModule],

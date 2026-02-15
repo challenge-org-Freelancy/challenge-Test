@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { Participant } from '../../models/participant.model';
+import { Participant } from '@core/models/participant.model';
 
 @Component({
   selector: 'app-participants-modal',

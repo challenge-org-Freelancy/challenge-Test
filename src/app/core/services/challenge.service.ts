@@ -86,6 +86,11 @@ export class ChallengeService {
    * Add a new challenge
    */
   addChallenge(challenge: Record<string, any>): Observable<Challenge> {
+    // MySQL TEXT ~64KB. Send URL or compressed base64 under limit.
+    const img = challenge['image'] || null;
+    const trimmed = img && typeof img === 'string' ? img.trim() : '';
+    const imageForDb = trimmed.length > 0 && trimmed.length <= 60000 ? trimmed : null;
+
     const raw: Record<string, any> = {
       title: challenge['title'],
       description: challenge['description'],
@@ -99,7 +104,7 @@ export class ChallengeService {
       points: challenge['points'] ?? 0,
       requirements: challenge['requirements'] ?? [],
       githubUrl: challenge['githubUrl'] || null,
-      image: challenge['image'] || null
+      image: imageForDb
     };
     // Omit null/empty string to avoid validation issues
     const payload: Record<string, any> = {};
