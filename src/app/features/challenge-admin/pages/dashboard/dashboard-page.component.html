@@ -1,0 +1,33 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <app-dashboard-header></app-dashboard-header>
+
+  <!-- Main Content -->
+  <div class="max-w-[1600px] mx-auto px-6 py-8 space-y-8">
+    <!-- Quick Action Cards -->
+    <section>
+      <app-quick-action-cards
+        (createChallenge)="onCreateChallenge()"
+        (aiGenerate)="onAIGenerate()">
+      </app-quick-action-cards>
+    </section>
+
+    <!-- Participant Analytics -->
+    <section>
+      <app-participant-analytics></app-participant-analytics>
+    </section>
+
+    <!-- Deadline Analytics -->
+    <section>
+      <app-deadline-analytics></app-deadline-analytics>
+    </section>
+
+    <!-- Recent Active Challenges -->
+    <section>
+      <app-challenges-preview
+        [challenges]="challenges"
+        (viewAll)="onViewAllChallenges()">
+      </app-challenges-preview>
+    </section>
+  </div>
+</div>

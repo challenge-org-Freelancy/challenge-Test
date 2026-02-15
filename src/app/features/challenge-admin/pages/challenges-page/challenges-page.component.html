@@ -1,0 +1,39 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header -->
+  <app-dashboard-header></app-dashboard-header>
+
+  <!-- Main Content -->
+  <div class="max-w-[1600px] mx-auto px-6 py-8">
+    <!-- Page Title -->
+    <div class="mb-8">
+      <h1 class="text-3xl mb-2">All Challenges</h1>
+      <p class="text-gray-600">
+        Comprehensive view of all coding challenges with advanced filtering
+      </p>
+    </div>
+
+    <!-- Modern Challenges Grid -->
+    <app-modern-challenges-grid
+      [challenges]="challenges"
+      (edit)="onEditChallenge($event)"
+      (duplicate)="onDuplicateChallenge($event)"
+      (viewParticipants)="onViewParticipants($event)">
+    </app-modern-challenges-grid>
+  </div>
+
+  <!-- Edit Challenge Modal -->
+  <app-edit-challenge-modal
+    [isOpen]="isEditModalOpen"
+    [challenge]="selectedChallenge"
+    (close)="onCloseEditModal()"
+    (save)="onSaveChallenge($event)">
+  </app-edit-challenge-modal>
+
+  <!-- Participants Modal -->
+  <app-participants-modal
+    [isOpen]="isParticipantsModalOpen"
+    [challenge]="selectedChallenge"
+    [participants]="selectedChallengeParticipants"
+    (close)="onCloseParticipantsModal()">
+  </app-participants-modal>
+</div>

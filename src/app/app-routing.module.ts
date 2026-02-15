@@ -22,6 +22,10 @@ const routes: Routes = [
   {
     path: 'challenges',
     loadChildren: () => import('./features/challenges/challenges.module').then(m => m.ChallengesModule)
+  },
+  {
+    path: 'admin/challenges',
+    loadChildren: () => import('./features/challenge-admin/challenge-admin.module').then(m => m.ChallengeAdminModule)
   }
 ];
 

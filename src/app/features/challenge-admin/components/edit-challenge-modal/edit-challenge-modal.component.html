@@ -1,0 +1,156 @@
+<div *ngIf="isOpen" class="modal-overlay fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" (click)="onOverlayClick($event)">
+  <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+    <!-- Header -->
+    <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+      <div>
+        <h2 class="text-xl">Edit Challenge</h2>
+        <p class="text-sm text-gray-600">Update challenge details and settings</p>
+      </div>
+      <button
+        (click)="onClose()"
+        class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Form Content -->
+    <div class="p-6 space-y-5">
+      <!-- Title -->
+      <div>
+        <label class="block text-sm mb-2">Challenge Title *</label>
+        <input
+          type="text"
+          [(ngModel)]="editedChallenge.title"
+          placeholder="Enter challenge title..."
+          class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20"
+        />
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="block text-sm mb-2">Description</label>
+        <textarea
+          [(ngModel)]="editedChallenge.description"
+          placeholder="Describe the challenge..."
+          rows="4"
+          class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20 resize-none"></textarea>
+      </div>
+
+      <!-- Category & Difficulty -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm mb-2">Category</label>
+          <select
+            [(ngModel)]="editedChallenge.category"
+            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20">
+            <option value="">Select category...</option>
+            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm mb-2">Difficulty</label>
+          <select
+            [(ngModel)]="editedChallenge.difficulty"
+            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20">
+            <option value="">Select difficulty...</option>
+            <option *ngFor="let diff of difficulties" [value]="diff">{{ diff }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Status & Points -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm mb-2">Status</label>
+          <select
+            [(ngModel)]="editedChallenge.status"
+            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20">
+            <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm mb-2">Points</label>
+          <input
+            type="number"
+            [(ngModel)]="editedChallenge.points"
+            placeholder="100"
+            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20"
+          />
+        </div>
+      </div>
+
+      <!-- Dates -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm mb-2">Start Date</label>
+          <input
+            type="date"
+            [(ngModel)]="editedChallenge.startDate"
+            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm mb-2">End Date</label>
+          <input
+            type="date"
+            [(ngModel)]="editedChallenge.endDate"
+            class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20"
+          />
+        </div>
+      </div>
+
+      <!-- Max Participants -->
+      <div>
+        <label class="block text-sm mb-2">Max Participants</label>
+        <input
+          type="number"
+          [(ngModel)]="editedChallenge.maxParticipants"
+          placeholder="500"
+          class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20"
+        />
+      </div>
+
+      <!-- GitHub URL -->
+      <div>
+        <label class="block text-sm mb-2">GitHub Repository URL</label>
+        <input
+          type="url"
+          [(ngModel)]="editedChallenge.githubUrl"
+          placeholder="https://github.com/..."
+          class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20"
+        />
+      </div>
+
+      <!-- Image URL -->
+      <div>
+        <label class="block text-sm mb-2">Challenge Image URL</label>
+        <input
+          type="url"
+          [(ngModel)]="editedChallenge.image"
+          placeholder="https://..."
+          class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20"
+        />
+        <p class="text-xs text-gray-500 mt-1">Recommended size: 800x400px</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="sticky bottom-0 bg-white border-t border-gray-200 px-6 py-4 flex items-center justify-end gap-3">
+      <button
+        (click)="onClose()"
+        class="px-5 py-2.5 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors">
+        Cancel
+      </button>
+      <button
+        (click)="onSave()"
+        class="px-5 py-2.5 bg-[#02066F] text-white rounded-lg hover:bg-[#02066F]/90 transition-colors">
+        Save Changes
+      </button>
+    </div>
+  </div>
+</div>

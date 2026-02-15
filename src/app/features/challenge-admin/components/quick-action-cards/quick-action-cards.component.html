@@ -1,0 +1,51 @@
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <!-- Create Challenge Card -->
+  <div class="bg-white rounded-xl border border-gray-200 p-8 hover:shadow-lg transition-shadow">
+    <div class="flex items-start gap-4">
+      <div class="w-14 h-14 bg-blue-900/10 rounded-xl flex items-center justify-center flex-shrink-0">
+        <svg class="w-7 h-7 text-[#02066F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+        </svg>
+      </div>
+      <div class="flex-1">
+        <h3 class="text-lg font-medium mb-2">Create a New Challenge</h3>
+        <p class="text-gray-600 mb-4">
+          Design a custom coding challenge with tasks, deadlines, and requirements tailored to your needs.
+        </p>
+        <button
+          (click)="onCreateChallenge()"
+          class="px-5 py-2 bg-[#02066F] text-white rounded-lg hover:bg-[#02066F]/90 transition-colors">
+          Start Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Generate Challenge with AI Card -->
+  <div class="relative overflow-hidden bg-gradient-to-br from-[#800020]/5 to-[#02066F]/5 rounded-xl border-2 border-[#800020]/30 p-8 hover:shadow-lg transition-shadow">
+    <div class="absolute top-0 right-0 w-32 h-32 bg-[#800020]/5 rounded-full -translate-y-16 translate-x-16"></div>
+    <div class="flex items-start gap-4 relative z-10">
+      <div class="w-14 h-14 bg-gradient-to-br from-[#800020] to-[#800020]/80 rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+          <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path>
+          <path d="M20 3v4"></path>
+          <path d="M22 5h-4"></path>
+          <path d="M4 17v2"></path>
+          <path d="M5 18H3"></path>
+        </svg>
+      </div>
+      <div class="flex-1">
+        <div class="flex items-center gap-2 mb-2">
+          <h3 class="text-lg font-medium">Generate Challenge with AI</h3>
+          <span class="px-2 py-0.5 bg-[#800020]/20 text-[#800020] text-xs rounded-full">NEW</span>
+        </div>
+        <p class="text-[#717182] mb-4">Let AI create a complete challenge from a topic, technology, or skill set. Automatically generates tasks and deadlines.</p>
+        <button
+          (click)="onAIGenerate()"
+          class="px-5 py-2 bg-[#800020] text-white rounded-lg hover:bg-[#800020]/90 transition-colors shadow-sm">
+          Start AI Generation
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
