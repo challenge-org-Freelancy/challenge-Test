@@ -38,7 +38,7 @@ export class ChallengesPreviewComponent implements OnChanges {
     const active = this.challenges.filter(c => c.status === 'Active').length;
     const totalParticipants = this.challenges.reduce((sum, c) => sum + (c.participants || 0), 0);
     const avgCompletion = total > 0 
-      ? Math.round(this.challenges.reduce((sum, c) => sum + (c.completionRate || 0), 0) / total)
+      ? Math.round(this.challenges.reduce((sum, c) => sum + (c.progress ?? c.completionRate ?? 0), 0) / total)
       : 0;
 
     this.stats = { total, active, totalParticipants, avgCompletion };

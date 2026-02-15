@@ -1,24 +1,60 @@
-<div class="min-h-screen bg-gray-50">
-  <!-- Header -->
-  <app-dashboard-header></app-dashboard-header>
+<div class="min-h-screen" style="background-color: var(--background); color: var(--foreground);">
+  <!-- Header Bar - Sticky on scroll -->
+  <header class="challenges-header-bar sticky top-0 z-40 bg-[var(--card)] border-b border-[var(--border)]">
+    <div class="challenges-header-inner max-w-[1800px] mx-auto px-6 py-6">
+      <div class="flex flex-col gap-4">
+        <div class="flex items-center gap-4">
+          <button
+            (click)="onBack()"
+            class="challenges-header-back-btn p-2 rounded-lg transition-colors"
+            title="Back to Dashboard">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 19-7-7 7-7"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 12H5"></path>
+            </svg>
+          </button>
+          <div class="flex-1">
+            <h1 class="challenges-header-title mb-1 text-2xl font-semibold">All Challenges</h1>
+            <p class="challenges-header-subtitle text-sm">Complete challenge management and organization</p>
+          </div>
+          <button
+            (click)="onCreateChallenge()"
+            class="challenges-header-create-btn px-6 py-2.5 rounded-lg flex items-center gap-2 shadow-sm transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14"></path>
+            </svg>
+            Create Challenge
+          </button>
+        </div>
+        <div class="relative max-w-2xl">
+          <svg class="challenges-header-search-icon absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></circle>
+            <path d="m21 21-4.3-4.3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onSearchChange()"
+            placeholder="Search challenges by title, description, or category..."
+            class="challenges-header-search w-full pl-12 pr-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20">
+        </div>
+      </div>
+    </div>
+  </header>
 
   <!-- Main Content -->
-  <div class="max-w-[1600px] mx-auto px-6 py-8">
-    <!-- Page Title -->
-    <div class="mb-8">
-      <h1 class="text-3xl mb-2">All Challenges</h1>
-      <p class="text-gray-600">
-        Comprehensive view of all coding challenges with advanced filtering
-      </p>
+  <div class="challenges-main-content">
+    <div class="mt-6">
+      <app-modern-challenges-grid
+        [challenges]="filteredChallenges"
+        (edit)="onEditChallenge($event)"
+        (duplicate)="onDuplicateChallenge($event)"
+        (view)="onViewChallenge($event)"
+        (viewParticipants)="onViewParticipants($event)"
+        (delete)="onDeleteChallenge($event)">
+      </app-modern-challenges-grid>
     </div>
-
-    <!-- Modern Challenges Grid -->
-    <app-modern-challenges-grid
-      [challenges]="challenges"
-      (edit)="onEditChallenge($event)"
-      (duplicate)="onDuplicateChallenge($event)"
-      (viewParticipants)="onViewParticipants($event)">
-    </app-modern-challenges-grid>
   </div>
 
   <!-- Edit Challenge Modal -->

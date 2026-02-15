@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --font-size: 16px;
+  --background: #fafafa;
+  --foreground: oklch(0.145 0 0);
+  --card: #ffffff;
+  --card-foreground: oklch(0.145 0 0);
+  --primary: #02066F;
+  --primary-foreground: #ffffff;
+  --muted: #ececf0;
+  --muted-foreground: #717182;
+  --accent: #800020;
+  --border: rgba(0, 0, 0, 0.1);
+  --input-background: #f3f3f5;
+  --ring: oklch(0.708 0 0);
+  --radius: 0.625rem;
+  --spacing: 0.25rem;
+}

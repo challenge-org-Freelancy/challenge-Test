@@ -1,87 +1,83 @@
 <div class="space-y-6">
-  <!-- Filters & Search -->
-  <div class="bg-white rounded-xl border border-gray-200 p-5">
-    <div class="flex flex-col md:flex-row gap-4">
-      <!-- Search -->
-      <div class="relative flex-1">
-        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+  <!-- Challenges Overview Header -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div>
+      <h2 class="mb-1 text-xl font-semibold">Challenges Overview</h2>
+      <p class="text-gray-600 text-sm">Manage and monitor all your coding challenges ({{ challenges.length }} total)</p>
+    </div>
+    <div class="flex items-center gap-2">
+      <button
+        (click)="viewMode = 'grid'"
+        [class.bg-[#02066F]]="viewMode === 'grid'"
+        [class.text-white]="viewMode === 'grid'"
+        [class.bg-gray-100]="viewMode !== 'grid'"
+        [class.text-gray-600]="viewMode !== 'grid'"
+        class="p-2 rounded-lg transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <rect width="7" height="7" x="3" y="3" rx="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+          <rect width="7" height="7" x="14" y="3" rx="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+          <rect width="7" height="7" x="14" y="14" rx="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+          <rect width="7" height="7" x="3" y="14" rx="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
         </svg>
-        <input
-          type="text"
-          [(ngModel)]="searchQuery"
-          (ngModelChange)="onSearchChange()"
-          placeholder="Search challenges..."
-          class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20"
-        />
-      </div>
-
-      <!-- Category Filter -->
-      <select
-        [(ngModel)]="filterCategory"
-        (ngModelChange)="onFilterChange()"
-        class="px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20">
-        <option value="all">All Categories</option>
-        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
-      </select>
-
-      <!-- Status Filter -->
-      <select
-        [(ngModel)]="filterStatus"
-        (ngModelChange)="onFilterChange()"
-        class="px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20">
-        <option value="all">All Status</option>
-        <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
-      </select>
-
-      <!-- Difficulty Filter -->
-      <select
-        [(ngModel)]="filterDifficulty"
-        (ngModelChange)="onFilterChange()"
-        class="px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#02066F]/20">
-        <option value="all">All Difficulties</option>
-        <option *ngFor="let diff of difficulties" [value]="diff">{{ diff }}</option>
-      </select>
-
-      <!-- View Toggle -->
-      <div class="flex gap-2 border border-gray-200 rounded-lg p-1">
-        <button
-          (click)="viewMode = 'grid'"
-          [class.bg-[#02066F]]="viewMode === 'grid'"
-          [class.text-white]="viewMode === 'grid'"
-          class="p-2 rounded transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
-          </svg>
-        </button>
-        <button
-          (click)="viewMode = 'list'"
-          [class.bg-[#02066F]]="viewMode === 'list'"
-          [class.text-white]="viewMode === 'list'"
-          class="p-2 rounded transition-colors">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-        </button>
-      </div>
+      </button>
+      <button
+        (click)="viewMode = 'list'"
+        [class.bg-[#02066F]]="viewMode === 'list'"
+        [class.text-white]="viewMode === 'list'"
+        [class.bg-gray-100]="viewMode !== 'list'"
+        [class.text-gray-600]="viewMode !== 'list'"
+        class="p-2 rounded-lg transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <rect width="7" height="7" x="3" y="3" rx="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+          <rect width="7" height="7" x="3" y="14" rx="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+          <path d="M14 4h7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M14 9h7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M14 15h7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+          <path d="M14 20h7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </button>
     </div>
   </div>
 
-  <!-- Results Count -->
-  <div class="flex items-center justify-between">
-    <p class="text-sm text-gray-600">
-      Showing {{ filteredChallenges.length }} of {{ challenges.length }} challenges
-    </p>
+  <!-- Filters Card -->
+  <div class="bg-white rounded-xl border border-gray-200 p-4">
+    <div class="flex items-center gap-2 mb-3">
+      <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20a1 1 0 0 0 .553.895l2 1A1 1 0 0 0 14 21v-7a2 2 0 0 1 .517-1.341L21.74 4.67A1 1 0 0 0 21 3H3a1 1 0 0 0-.742 1.67l7.225 7.989A2 2 0 0 1 10 14z"></path>
+      </svg>
+      <span class="text-sm font-medium">Filters</span>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <select
+        [(ngModel)]="filterCategory"
+        (ngModelChange)="onFilterChange()"
+        class="px-3 py-2 border border-gray-200 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#02066F]/20">
+        <option value="all">All Categories</option>
+        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+      </select>
+      <select
+        [(ngModel)]="filterStatus"
+        (ngModelChange)="onFilterChange()"
+        class="px-3 py-2 border border-gray-200 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#02066F]/20">
+        <option value="all">All Status</option>
+        <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+      </select>
+      <select
+        [(ngModel)]="filterDifficulty"
+        (ngModelChange)="onFilterChange()"
+        class="px-3 py-2 border border-gray-200 rounded-lg bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#02066F]/20">
+        <option value="all">All Difficulty</option>
+        <option *ngFor="let diff of difficulties" [value]="diff">{{ diff }}</option>
+      </select>
+    </div>
   </div>
 
   <!-- Grid View -->
   <div *ngIf="viewMode === 'grid'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     <div
       *ngFor="let challenge of filteredChallenges; trackBy: trackByChallenge"
-      class="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-xl transition-all group">
-      
-      <!-- Image -->
-      <div class="relative h-48 overflow-hidden bg-gradient-to-br from-blue-900/10 to-[#800020]/10">
+      class="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-300 group">
+      <div class="relative h-48 overflow-hidden bg-gradient-to-br from-[#02066F]/10 to-[#800020]/10">
         <img
           *ngIf="challenge.image"
           [src]="challenge.image"
@@ -90,76 +86,95 @@
         />
         <div *ngIf="!challenge.image" class="w-full h-full flex items-center justify-center">
           <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path>
+            <circle cx="12" cy="8" r="6"></circle>
           </svg>
         </div>
-        
-        <!-- Status Badge -->
         <div class="absolute top-3 left-3">
-          <div [class]="'px-3 py-1 rounded-full text-white text-xs ' + getStatusColor(challenge.status)">
-            {{ challenge.status }}
-          </div>
+          <div [class]="'px-3 py-1 rounded-full text-xs ' + getStatusColor(challenge.status)">{{ challenge.status }}</div>
         </div>
-
-        <!-- Difficulty Badge -->
         <div class="absolute top-3 right-3">
-          <div [class]="'px-3 py-1 rounded-full text-xs border ' + getDifficultyColor(challenge.difficulty)">
-            {{ challenge.difficulty }}
-          </div>
+          <div [class]="'px-3 py-1 rounded-full text-xs ' + getDifficultyColor(challenge.difficulty)">{{ challenge.difficulty || 'N/A' }}</div>
         </div>
       </div>
-
-      <!-- Content -->
       <div class="p-5">
         <div class="mb-3">
-          <h3 class="text-lg mb-2 line-clamp-1">{{ challenge.title }}</h3>
-          <p class="text-sm text-gray-600 line-clamp-2 mb-3">
-            {{ challenge.description || 'No description provided' }}
-          </p>
-          <span class="inline-block px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-xs">
-            {{ challenge.category }}
-          </span>
+          <h3 class="mb-2 line-clamp-2 min-h-[3rem] font-medium">{{ challenge.title }}</h3>
+          <p class="text-sm text-gray-600 line-clamp-2 min-h-[2.5rem]">{{ challenge.description || 'No description provided' }}</p>
         </div>
-
-        <!-- Stats -->
-        <div class="grid grid-cols-3 gap-3 mb-4 pt-4 border-t border-gray-200">
-          <div class="text-center">
-            <div class="text-lg mb-0.5">{{ challenge.participants || 0 }}</div>
-            <div class="text-xs text-gray-600">Participants</div>
+        <div class="mb-3">
+          <span class="text-xs text-[#02066F] bg-[#02066F]/5 px-2 py-1 rounded">{{ challenge.category || 'Uncategorized' }}</span>
+        </div>
+        <div class="flex flex-wrap gap-1 mb-4" *ngIf="getTechnologyArray(challenge).length > 0">
+          <span *ngFor="let tech of getTechnologyArray(challenge)" class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">{{ tech }}</span>
+        </div>
+        <div class="grid grid-cols-2 gap-3 mb-4 pb-4 border-b border-gray-200">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <div>
+              <div class="text-sm font-medium">{{ challenge.participants || 0 }}</div>
+              <div class="text-xs text-gray-500">Participants</div>
+            </div>
           </div>
-          <div class="text-center">
-            <div class="text-lg mb-0.5">{{ challenge.points || 0 }}</div>
-            <div class="text-xs text-gray-600">Points</div>
-          </div>
-          <div class="text-center">
-            <div class="text-lg mb-0.5 text-[#02066F]">{{ challenge.completionRate || 0 }}%</div>
-            <div class="text-xs text-gray-600">Completion</div>
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path>
+              <circle cx="12" cy="8" r="6"></circle>
+            </svg>
+            <div>
+              <div class="text-sm font-medium">{{ challenge.points || 0 }}</div>
+              <div class="text-xs text-gray-500">Points</div>
+            </div>
           </div>
         </div>
-
-        <!-- Actions -->
+        <div class="mb-4">
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-gray-500">Completion Rate</span>
+            <span class="font-medium">{{ getCompletionRate(challenge) }}%</span>
+          </div>
+          <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-[#02066F] to-[#800020] transition-all rounded-full" [style.width.%]="getCompletionRate(challenge)"></div>
+          </div>
+        </div>
         <div class="flex gap-2">
           <button
-            (click)="onEdit(challenge)"
-            class="flex-1 py-2 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors text-sm flex items-center justify-center gap-1">
+            (click)="onView(challenge)"
+            class="flex-1 px-3 py-2 bg-[#02066F] text-white rounded-lg hover:bg-[#02066F]/90 transition-colors text-sm flex items-center justify-center gap-1">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-            </svg>
-            Edit
-          </button>
-          <button
-            (click)="onViewParticipants(challenge)"
-            class="flex-1 py-2 bg-[#02066F] text-white rounded-lg hover:bg-[#02066F]/90 transition-colors text-sm flex items-center justify-center gap-1">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path>
+              <circle cx="12" cy="12" r="3"></circle>
             </svg>
             View
           </button>
-          <button
-            (click)="onDuplicate(challenge)"
-            class="p-2 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors">
+          <button (click)="onEdit(challenge)" class="px-3 py-2 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors" title="Edit">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"></path>
+            </svg>
+          </button>
+          <button (click)="onDuplicate(challenge)" class="px-3 py-2 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors" title="Duplicate">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></rect>
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+          <button (click)="onViewParticipants(challenge)" class="px-3 py-2 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors" title="View Participants">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </button>
+          <button (click)="onDelete(challenge)" class="px-3 py-2 border border-gray-200 rounded-lg hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-colors" title="Delete">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11v6M14 11v6"></path>
             </svg>
           </button>
         </div>
@@ -172,90 +187,50 @@
     <div
       *ngFor="let challenge of filteredChallenges; trackBy: trackByChallenge"
       class="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-lg transition-shadow">
-      
       <div class="flex items-center gap-5">
-        <!-- Image -->
-        <div class="w-32 h-32 bg-gradient-to-br from-blue-900/10 to-[#800020]/10 rounded-lg overflow-hidden flex-shrink-0">
-          <img
-            *ngIf="challenge.image"
-            [src]="challenge.image"
-            [alt]="challenge.title"
-            class="w-full h-full object-cover"
-          />
+        <div class="w-32 h-32 bg-gradient-to-br from-[#02066F]/10 to-[#800020]/10 rounded-lg overflow-hidden flex-shrink-0">
+          <img *ngIf="challenge.image" [src]="challenge.image" [alt]="challenge.title" class="w-full h-full object-cover" />
           <div *ngIf="!challenge.image" class="w-full h-full flex items-center justify-center">
             <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path>
+              <circle cx="12" cy="8" r="6"></circle>
             </svg>
           </div>
         </div>
-
-        <!-- Content -->
         <div class="flex-1 min-w-0">
           <div class="flex items-start justify-between gap-4 mb-2">
             <div class="flex-1 min-w-0">
               <h3 class="text-lg mb-1 truncate">{{ challenge.title }}</h3>
-              <p class="text-sm text-gray-600 line-clamp-2 mb-2">
-                {{ challenge.description || 'No description provided' }}
-              </p>
+              <p class="text-sm text-gray-600 line-clamp-2 mb-2">{{ challenge.description || 'No description provided' }}</p>
               <div class="flex items-center gap-2 flex-wrap">
-                <span [class]="'px-2 py-0.5 rounded-full text-white text-xs ' + getStatusColor(challenge.status)">
-                  {{ challenge.status }}
-                </span>
-                <span [class]="'px-2 py-0.5 rounded-full text-xs border ' + getDifficultyColor(challenge.difficulty)">
-                  {{ challenge.difficulty }}
-                </span>
-                <span class="px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full text-xs">
-                  {{ challenge.category }}
-                </span>
+                <span [class]="'px-2 py-0.5 rounded-full text-white text-xs ' + getStatusColor(challenge.status)">{{ challenge.status }}</span>
+                <span [class]="'px-2 py-0.5 rounded-full text-xs ' + getDifficultyColor(challenge.difficulty)">{{ challenge.difficulty }}</span>
+                <span class="text-xs text-[#02066F] bg-[#02066F]/5 px-2 py-1 rounded">{{ challenge.category }}</span>
               </div>
             </div>
-
-            <!-- Actions -->
             <div class="flex gap-2 flex-shrink-0">
-              <button
-                (click)="onEdit(challenge)"
-                class="p-2 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                </svg>
+              <button (click)="onView(challenge)" class="px-3 py-2 bg-[#02066F] text-white rounded-lg hover:bg-[#02066F]/90 text-sm flex items-center gap-1">View</button>
+              <button (click)="onEdit(challenge)" class="p-2 border border-gray-200 rounded-lg hover:bg-gray-100" title="Edit">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"></path></svg>
               </button>
-              <button
-                (click)="onViewParticipants(challenge)"
-                class="p-2 bg-[#02066F] text-white rounded-lg hover:bg-[#02066F]/90 transition-colors">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                </svg>
+              <button (click)="onDuplicate(challenge)" class="p-2 border border-gray-200 rounded-lg hover:bg-gray-100" title="Duplicate">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path></svg>
               </button>
-              <button
-                (click)="onDuplicate(challenge)"
-                class="p-2 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors">
+              <button (click)="onViewParticipants(challenge)" class="p-2 border border-gray-200 rounded-lg hover:bg-gray-100" title="View Participants">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </button>
+              <button (click)="onDelete(challenge)" class="p-2 border border-gray-200 rounded-lg hover:bg-red-50 hover:border-red-200 hover:text-red-600 transition-colors" title="Delete">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11v6M14 11v6"></path>
                 </svg>
               </button>
             </div>
           </div>
-
-          <!-- Stats -->
           <div class="flex items-center gap-6 text-sm text-gray-600 mt-3">
-            <div class="flex items-center gap-1">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-              </svg>
-              <span>{{ challenge.participants || 0 }} participants</span>
-            </div>
-            <div class="flex items-center gap-1">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
-              </svg>
-              <span>{{ challenge.points || 0 }} points</span>
-            </div>
-            <div class="flex items-center gap-1 text-[#02066F]">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-              </svg>
-              <span>{{ challenge.completionRate || 0 }}% completion</span>
-            </div>
+            <div class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg><span>{{ challenge.participants || 0 }} participants</span></div>
+            <div class="flex items-center gap-1"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path><circle cx="12" cy="8" r="6"></circle></svg><span>{{ challenge.points || 0 }} points</span></div>
+            <div class="flex items-center gap-1 text-[#02066F]"><span>{{ getCompletionRate(challenge) }}% completion</span></div>
           </div>
         </div>
       </div>
@@ -266,10 +241,11 @@
   <div *ngIf="filteredChallenges.length === 0" class="text-center py-16 bg-white rounded-xl border border-gray-200">
     <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
       <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15.477 12.89 1.515 8.526a.5.5 0 0 1-.81.47l-3.58-2.687a1 1 0 0 0-1.197 0l-3.586 2.686a.5.5 0 0 1-.81-.469l1.514-8.526"></path>
+        <circle cx="12" cy="8" r="6"></circle>
       </svg>
     </div>
     <h3 class="text-lg mb-2">No challenges found</h3>
-    <p class="text-sm text-gray-600">Try adjusting your search or filter criteria</p>
+    <p class="text-sm text-gray-600">Try adjusting your filter criteria</p>
   </div>
 </div>

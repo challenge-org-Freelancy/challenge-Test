@@ -54,19 +54,31 @@ export class ParticipantAnalyticsComponent implements OnInit {
       datasets: [
         {
           label: 'Completed',
-          data: [280, 320, 380, 420, 460, 520],
+          data: [240, 320, 390, 420, 490, 520],
           borderColor: '#02066F',
-          backgroundColor: 'rgba(2, 6, 111, 0.1)',
+          backgroundColor: 'transparent',
+          borderWidth: 2,
           fill: false,
-          tension: 0.4
+          tension: 0.3,
+          pointRadius: 4,
+          pointHoverRadius: 5,
+          pointBackgroundColor: '#ffffff',
+          pointBorderColor: '#02066F',
+          pointBorderWidth: 2
         },
         {
           label: 'Active',
-          data: [450, 480, 520, 520, 480, 420],
+          data: [420, 470, 520, 490, 570, 610],
           borderColor: '#800020',
-          backgroundColor: 'rgba(128, 0, 32, 0.1)',
+          backgroundColor: 'transparent',
+          borderWidth: 2,
           fill: false,
-          tension: 0.4
+          tension: 0.3,
+          pointRadius: 4,
+          pointHoverRadius: 5,
+          pointBackgroundColor: '#ffffff',
+          pointBorderColor: '#800020',
+          pointBorderWidth: 2
         }
       ]
     };
@@ -74,20 +86,75 @@ export class ParticipantAnalyticsComponent implements OnInit {
     this.completionTrendsOptions = {
       responsive: true,
       maintainAspectRatio: false,
+      layout: { padding: { top: 10, right: 10, bottom: 0, left: 0 } },
       plugins: {
+        datalabels: { display: false },
+        tooltip: {
+          backgroundColor: '#ffffff',
+          titleColor: '#111827',
+          bodyColor: '#374151',
+          borderColor: '#e5e7eb',
+          borderWidth: 1,
+          padding: 16,
+          cornerRadius: 8,
+          displayColors: true,
+          titleFont: { size: 15 },
+          bodyFont: { size: 14 },
+          callbacks: {
+            title: (items: any[]) => items[0]?.label ?? '',
+            label: (ctx: any) => ` ${ctx.dataset.label} : ${ctx.raw}`
+          }
+        },
         legend: {
           display: true,
-          position: 'bottom'
+          position: 'bottom',
+          align: 'center',
+          labels: {
+            usePointStyle: true,
+            pointStyle: 'circle',
+            padding: 20,
+            font: { size: 12 },
+            color: '#374151',
+            generateLabels: (chart: any) => {
+              const datasets = chart.data.datasets;
+              return datasets.map((ds: any, i: number) => ({
+                text: ds.label,
+                fillStyle: ds.borderColor,
+                strokeStyle: ds.borderColor,
+                lineWidth: 2,
+                fontColor: ds.borderColor,
+                hidden: false,
+                index: i
+              }));
+            }
+          }
         }
       },
       scales: {
         y: {
           beginAtZero: true,
           max: 800,
-          grid: { color: 'rgba(229, 231, 235, 1)' }
+          ticks: {
+            stepSize: 200,
+            color: '#6b7280',
+            font: { size: 12 }
+          },
+          grid: {
+            color: 'rgba(229, 231, 235, 0.9)',
+            borderDash: [3, 3]
+          },
+          border: { display: false }
         },
         x: {
-          grid: { display: false }
+          ticks: {
+            color: '#6b7280',
+            font: { size: 12 }
+          },
+          grid: {
+            color: 'rgba(229, 231, 235, 0.9)',
+            borderDash: [3, 3]
+          },
+          border: { display: false }
         }
       }
     };

@@ -9,16 +9,17 @@ export class ModernChallengesGridComponent implements OnChanges {
   @Input() challenges: any[] = [];
   @Output() edit = new EventEmitter<any>();
   @Output() duplicate = new EventEmitter<any>();
+  @Output() view = new EventEmitter<any>();
   @Output() viewParticipants = new EventEmitter<any>();
+  @Output() delete = new EventEmitter<any>();
 
-  searchQuery: string = '';
   filterCategory: string = 'all';
   filterStatus: string = 'all';
   filterDifficulty: string = 'all';
   viewMode: 'grid' | 'list' = 'grid';
 
-  categories = ['Web Development', 'Mobile Development', 'Machine Learning', 'DevOps', 'Data Science', 'Blockchain'];
-  statuses = ['Draft', 'Active', 'Closed'];
+  categories = ['Full Stack', 'Backend', 'Frontend', 'AI/ML', 'DevOps', 'Web Development', 'Mobile Development', 'Machine Learning', 'Data Science', 'Blockchain'];
+  statuses = ['Active', 'Draft', 'Closed'];
   difficulties = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 
   filteredChallenges: any[] = [];
@@ -28,19 +29,16 @@ export class ModernChallengesGridComponent implements OnChanges {
   }
 
   applyFilters(): void {
+    if (!this.challenges) {
+      this.filteredChallenges = [];
+      return;
+    }
     this.filteredChallenges = this.challenges.filter(challenge => {
-      const matchesSearch = challenge.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-                           (challenge.description || '').toLowerCase().includes(this.searchQuery.toLowerCase());
       const matchesCategory = this.filterCategory === 'all' || challenge.category === this.filterCategory;
       const matchesStatus = this.filterStatus === 'all' || challenge.status === this.filterStatus;
       const matchesDifficulty = this.filterDifficulty === 'all' || challenge.difficulty === this.filterDifficulty;
-      
-      return matchesSearch && matchesCategory && matchesStatus && matchesDifficulty;
+      return matchesCategory && matchesStatus && matchesDifficulty;
     });
-  }
-
-  onSearchChange(): void {
-    this.applyFilters();
   }
 
   onFilterChange(): void {
@@ -55,26 +53,45 @@ export class ModernChallengesGridComponent implements OnChanges {
     this.duplicate.emit(challenge);
   }
 
+  onView(challenge: any): void {
+    this.view.emit(challenge);
+  }
+
   onViewParticipants(challenge: any): void {
     this.viewParticipants.emit(challenge);
   }
 
+  onDelete(challenge: any): void {
+    this.delete.emit(challenge);
+  }
+
+  getTechnologyArray(challenge: any): string[] {
+    const tech = challenge.technology;
+    if (Array.isArray(tech)) return tech;
+    if (typeof tech === 'string') return tech ? [tech] : [];
+    return [];
+  }
+
+  getCompletionRate(challenge: any): number {
+    return challenge.progress ?? challenge.completionRate ?? 0;
+  }
+
   getStatusColor(status?: string): string {
     switch (status) {
-      case 'Active': return 'bg-green-500';
-      case 'Draft': return 'bg-gray-400';
-      case 'Closed': return 'bg-blue-500';
-      default: return 'bg-gray-400';
+      case 'Active': return 'bg-green-500 text-white shadow-lg backdrop-blur-sm';
+      case 'Draft': return 'bg-gray-400 text-white shadow-lg backdrop-blur-sm';
+      case 'Closed': return 'bg-blue-500 text-white shadow-lg backdrop-blur-sm';
+      default: return 'bg-gray-400 text-white shadow-lg backdrop-blur-sm';
     }
   }
 
   getDifficultyColor(difficulty?: string): string {
     switch (difficulty) {
-      case 'Beginner': return 'bg-emerald-100 text-emerald-700 border-emerald-200';
-      case 'Intermediate': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-      case 'Advanced': return 'bg-orange-100 text-orange-700 border-orange-200';
-      case 'Expert': return 'bg-red-100 text-red-700 border-red-200';
-      default: return 'bg-gray-100 text-gray-700 border-gray-200';
+      case 'Beginner': return 'bg-emerald-100 text-emerald-700 border-emerald-200 border backdrop-blur-sm';
+      case 'Intermediate': return 'bg-yellow-100 text-yellow-700 border-yellow-200 border backdrop-blur-sm';
+      case 'Advanced': return 'bg-orange-100 text-orange-700 border-orange-200 border backdrop-blur-sm';
+      case 'Expert': return 'bg-red-100 text-red-700 border-red-200 border backdrop-blur-sm';
+      default: return 'bg-gray-100 text-gray-700 border-gray-200 border backdrop-blur-sm';
     }
   }
 
