@@ -2,10 +2,11 @@ package tn.esprit.challengeservice.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import tn.esprit.challengeservice.entities.Challenge;
+import tn.esprit.challengeservice.entities.*;
 import tn.esprit.challengeservice.repositories.ChallengeRepository;
 
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ChallengeServiceImpl implements ichallengeService {
@@ -14,14 +15,11 @@ public class ChallengeServiceImpl implements ichallengeService {
 
     @Override
     public Challenge addChallenge(Challenge challenge) {
-
         if (challenge.getTasks() != null) {
             challenge.getTasks().forEach(task -> task.setChallenge(challenge));
         }
-
         return challengeRepository.save(challenge);
     }
-
 
     @Override
     public Challenge getChallengeById(String id) {
@@ -33,6 +31,7 @@ public class ChallengeServiceImpl implements ichallengeService {
     public List<Challenge> getAllChallenges() {
         return challengeRepository.findAll();
     }
+
     @Override
     public Challenge updateChallenge(String id, Challenge challenge) {
         Challenge existingChallenge = challengeRepository.findById(id)
@@ -49,7 +48,6 @@ public class ChallengeServiceImpl implements ichallengeService {
         existingChallenge.setStartDate(challenge.getStartDate());
         existingChallenge.setEndDate(challenge.getEndDate());
         existingChallenge.setStatus(challenge.getStatus());
-
         return challengeRepository.save(existingChallenge);
     }
 
