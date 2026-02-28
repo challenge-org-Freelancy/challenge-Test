@@ -1,6 +1,7 @@
 package tn.esprit.challengeservice.services;
 
 import tn.esprit.challengeservice.entities.ChallengeParticipation;
+import tn.esprit.challengeservice.entities.SonarCloudResult;
 
 import java.util.List;
 
@@ -12,4 +13,5 @@ public interface iparticipationService {
     void deleteParticipation(String id);
     boolean checkInvitationStatus(String participationId);
     String submitChallenge(String participationId, String branchName);
+    SonarCloudResult fetchSonarResults(String participationId);
 }

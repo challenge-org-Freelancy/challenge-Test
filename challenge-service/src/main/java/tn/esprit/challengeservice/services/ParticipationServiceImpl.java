@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.challengeservice.entities.*;
 import tn.esprit.challengeservice.repositories.ChallengeRepository;
+import tn.esprit.challengeservice.repositories.SonarCloudResultRepository;
 import tn.esprit.challengeservice.repositories.participationRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +18,7 @@ public class ParticipationServiceImpl implements iparticipationService {
     private final participationRepository participationRepository;
     private final ChallengeRepository challengeRepository;
     private final GitHubService gitHubService;
+    private final SonarCloudResultRepository sonarCloudResultRepository;
 
     @Override
     public ChallengeParticipation joinChallenge(String challengeId, String usernameGithub) {
@@ -102,5 +105,46 @@ public class ParticipationServiceImpl implements iparticipationService {
         participationRepository.save(participation);
 
         return prUrl;
+    }
+
+    @Override
+    public SonarCloudResult fetchSonarResults(String participationId) {
+        ChallengeParticipation participation = participationRepository.findById(participationId)
+                .orElseThrow(() -> new RuntimeException("Participation not found with id: " + participationId));
+
+        String prKey = gitHubService.getLatestPullRequestNumber(participation.getRepoName());
+        Map<String, Object> metrics = gitHubService.fetchSonarCloudMetrics(participation.getRepoName(), prKey);
+
+        SonarCloudResult result = sonarCloudResultRepository.findByParticipationId(participationId)
+                .orElse(new SonarCloudResult());
+
+        result.setQualityGateStatus(getStringMetric(metrics, "alert_status"));
+        result.setBugs(getIntMetric(metrics, "bugs"));
+        result.setCodeSmells(getIntMetric(metrics, "code_smells"));
+        result.setVulnerabilities(getIntMetric(metrics, "vulnerabilities"));
+        result.setSecurityHotspots(getIntMetric(metrics, "security_hotspots"));
+        result.setCoverage(getDoubleMetric(metrics, "coverage"));
+        result.setDuplication(getDoubleMetric(metrics, "duplicated_lines_density"));
+        result.setLinesOfCode(getIntMetric(metrics, "ncloc"));
+        result.setPullRequestKey(prKey);
+        result.setAnalyzedAt(new Date());
+        result.setParticipation(participation);
+
+        return sonarCloudResultRepository.save(result);
+    }
+
+    private String getStringMetric(Map<String, Object> metrics, String key) {
+        Object value = metrics.get(key);
+        return value != null ? value.toString() : null;
+    }
+
+    private int getIntMetric(Map<String, Object> metrics, String key) {
+        Object value = metrics.get(key);
+        return value != null ? Integer.parseInt(value.toString()) : 0;
+    }
+
+    private double getDoubleMetric(Map<String, Object> metrics, String key) {
+        Object value = metrics.get(key);
+        return value != null ? Double.parseDouble(value.toString()) : 0.0;
     }
 }

@@ -23,6 +23,7 @@ public class Task {
     private TaskStatus status;
     private Date submittedAt;
     private Date deadline;
+    private Long progress;
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private Challenge challenge;

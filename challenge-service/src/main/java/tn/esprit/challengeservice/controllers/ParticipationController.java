@@ -3,6 +3,7 @@ package tn.esprit.challengeservice.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.challengeservice.entities.ChallengeParticipation;
+import tn.esprit.challengeservice.entities.SonarCloudResult;
 import tn.esprit.challengeservice.services.GitHubService;
 import tn.esprit.challengeservice.services.iparticipationService;
 
@@ -65,6 +66,11 @@ public class ParticipationController {
                 "pullRequestUrl", prUrl,
                 "message", "Challenge submitted successfully. SonarCloud analysis will run automatically."
         );
+    }
+
+    @GetMapping("/{participationId}/sonar-results")
+    public SonarCloudResult getSonarResults(@PathVariable String participationId) {
+        return participationService.fetchSonarResults(participationId);
     }
 
     @GetMapping("/github/user-exists/{usernameGithub}")

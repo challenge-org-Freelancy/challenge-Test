@@ -9,8 +9,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Base64;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -189,6 +188,55 @@ public class GitHubService {
             }
             throw new RuntimeException("Failed to create pull request: " + e.getMessage());
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> fetchSonarCloudMetrics(String repoName, String pullRequestKey) {
+        String projectKey = ORG_OWNER + "_" + repoName;
+        String url = "https://sonarcloud.io/api/measures/component"
+                + "?component=" + projectKey
+                + "&pullRequest=" + pullRequestKey
+                + "&metricKeys=bugs,code_smells,vulnerabilities,security_hotspots,coverage,duplicated_lines_density,ncloc,alert_status";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + sonarToken);
+
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, request, Map.class);
+
+        if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
+            throw new RuntimeException("Failed to fetch SonarCloud metrics for: " + projectKey);
+        }
+
+        Map<String, Object> component = (Map<String, Object>) response.getBody().get("component");
+        List<Map<String, String>> measures = (List<Map<String, String>>) component.get("measures");
+
+        Map<String, Object> result = new HashMap<>();
+        for (Map<String, String> measure : measures) {
+            result.put(measure.get("metric"), measure.get("value"));
+        }
+
+        log.info("Fetched SonarCloud metrics for project {}, PR {}: {}", projectKey, pullRequestKey, result);
+        return result;
+    }
+
+    public String getLatestPullRequestNumber(String repoName) {
+        String url = "https://api.github.com/repos/" + ORG_OWNER + "/" + repoName + "/pulls?state=all&sort=created&direction=desc&per_page=1";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + githubToken);
+        headers.set("Accept", "application/vnd.github+json");
+
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+        ResponseEntity<List> response = restTemplate.exchange(url, HttpMethod.GET, request, List.class);
+
+        if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null && !response.getBody().isEmpty()) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> pr = (Map<String, Object>) response.getBody().get(0);
+            return String.valueOf(pr.get("number"));
+        }
+
+        throw new RuntimeException("No pull requests found for repo: " + repoName);
     }
 
     public void addSonarTokenSecret(String repoName) {

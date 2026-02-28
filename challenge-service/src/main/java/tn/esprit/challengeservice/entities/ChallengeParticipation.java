@@ -29,4 +29,7 @@ public class ChallengeParticipation {
     @JsonIgnore
     @ManyToOne
     private Challenge challenge;
+
+    @OneToOne(mappedBy = "participation", cascade = CascadeType.ALL)
+    private SonarCloudResult sonarCloudResult;
 }
