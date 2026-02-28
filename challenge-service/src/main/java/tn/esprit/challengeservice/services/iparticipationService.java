@@ -11,4 +11,5 @@ public interface iparticipationService {
     List<ChallengeParticipation> getParticipationsByChallenge(String challengeId);
     void deleteParticipation(String id);
     boolean checkInvitationStatus(String participationId);
+    String submitChallenge(String participationId, String branchName);
 }

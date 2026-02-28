@@ -4,5 +4,6 @@ public enum ParticipationStatus {
     PENDING_FORK,
     FORK_VERIFIED,
     ACTIVE,
+    SUBMITTED,
     COMPLETED
 }

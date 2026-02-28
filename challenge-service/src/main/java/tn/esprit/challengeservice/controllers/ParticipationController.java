@@ -3,6 +3,7 @@ package tn.esprit.challengeservice.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.challengeservice.entities.ChallengeParticipation;
+import tn.esprit.challengeservice.services.GitHubService;
 import tn.esprit.challengeservice.services.iparticipationService;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.Map;
 public class ParticipationController {
 
     private final iparticipationService participationService;
+    private final GitHubService gitHubService;
 
     @PostMapping("/{challengeId}/join")
     public ChallengeParticipation joinChallenge(
@@ -50,6 +52,27 @@ public class ParticipationController {
                 "participationId", id,
                 "accepted", accepted,
                 "message", accepted ? "Invitation accepted" : "Invitation still pending"
+        );
+    }
+
+    @PostMapping("/{participationId}/submit")
+    public Map<String, Object> submitChallenge(
+            @PathVariable String participationId,
+            @RequestParam String branchName) {
+        String prUrl = participationService.submitChallenge(participationId, branchName);
+        return Map.of(
+                "participationId", participationId,
+                "pullRequestUrl", prUrl,
+                "message", "Challenge submitted successfully. SonarCloud analysis will run automatically."
+        );
+    }
+
+    @GetMapping("/github/user-exists/{usernameGithub}")
+    public Map<String, Object> checkGitHubUserExists(@PathVariable String usernameGithub) {
+        boolean exists = gitHubService.doesUserExist(usernameGithub);
+        return Map.of(
+                "usernameGithub", usernameGithub,
+                "exists", exists
         );
     }
 }

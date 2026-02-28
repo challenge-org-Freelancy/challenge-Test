@@ -40,6 +40,8 @@ public class ParticipationServiceImpl implements iparticipationService {
 
         String repoUrl = gitHubService.createRepository(repoName);
         gitHubService.addCollaborator(repoName, usernameGithub);
+        gitHubService.addSonarTokenSecret(repoName);
+        gitHubService.createSonarCloudProject(repoName);
 
         ChallengeParticipation participation = ChallengeParticipation.builder()
                 .usernameGithub(usernameGithub)
@@ -83,5 +85,22 @@ public class ParticipationServiceImpl implements iparticipationService {
                 .orElseThrow(() -> new RuntimeException("Participation not found with id: " + participationId));
 
         return gitHubService.isCollaboratorAccepted(participation.getRepoName(), participation.getUsernameGithub());
+    }
+
+    @Override
+    public String submitChallenge(String participationId, String branchName) {
+        ChallengeParticipation participation = participationRepository.findById(participationId)
+                .orElseThrow(() -> new RuntimeException("Participation not found with id: " + participationId));
+
+        if (!ParticipationStatus.ACTIVE.equals(participation.getStatus())) {
+            throw new RuntimeException("Participation is not active");
+        }
+
+        String prUrl = gitHubService.createPullRequest(participation.getRepoName(), branchName);
+
+        participation.setStatus(ParticipationStatus.SUBMITTED);
+        participationRepository.save(participation);
+
+        return prUrl;
     }
 }
