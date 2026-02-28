@@ -1,37 +1,25 @@
 name: SonarCloud Analysis
 
-# Trigger workflow on PR to main branch
 on:
   pull_request:
     branches:
       - main
 
 jobs:
-  build:
+  sonarcloud:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout the PR code
       - uses: actions/checkout@v3
-
-      # 2. Set up Java environment
-      - name: Set up Java
-        uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '17'
+          fetch-depth: 0
 
-      # 3. Cache SonarCloud dependencies (optional)
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-
-      # 4. Run SonarCloud scanner
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          projectKey: challenge-org_challenge-template      # matches your pom.xml projectKey
-          organization: challenge-org-freelancy            # matches your SonarCloud org
-          token: ${{ secrets.SONAR_TOKEN }}               # the token secret you added
+          args: >
+            -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
+            -Dsonar.organization=challenge-org-freelancy
